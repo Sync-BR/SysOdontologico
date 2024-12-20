@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Pacientes</title>
+</head>
+<body>
+<style>
+    /* Reset de margens e padding */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    /* Estilo geral do body */
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f7fb;
+        color: #333;
+        padding: 20px;
+    }
+
+    /* Contêiner principal */
+    .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Título */
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #4CAF50;
+    }
+
+    /* Tabela */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th {
+        background-color: #4CAF50;
+        color: white;
+        padding: 12px;
+        text-align: left;
+        font-weight: normal;
+    }
+
+    td {
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+    }
+
+    tr:hover {
+        background-color: #f9f9f9;
+    }
+
+    a {
+        text-decoration: none;
+        color: #007BFF;
+        font-weight: bold;
+    }
+
+    a:hover {
+        text-decoration: underline;
+        color: #0056b3;
+    }
+
+    /* Botão para abrir o modal */
+    .btn-show-details {
+        background-color: #007BFF;
+        color: white;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .btn-show-details:hover {
+        background-color: #0056b3;
+    }
+
+    /* Estilo do Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+        padding-top: 60px;
+    }
+
+    .modal-content {
+        background-color: #fff;
+        margin: 5% auto;
+        padding: 20px;
+        border-radius: 8px;
+        width: 80%;
+        max-width: 600px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .close {
+        color: #aaa;
+        font-size: 28px;
+        font-weight: bold;
+        position: absolute;
+        right: 20px;
+        top: 10px;
+        cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+    }
+
+    .modal-content p {
+        margin-bottom: 10px;
+    }
+
+</style>
+<div class="container">
+    <h2>Lista de Pacientes</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>CPF</th>
+
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Itera sobre a lista de pacientes passada pelo Controller -->
+        <tr th:each="paciente : ${pacientes}">
+            <td th:text="${paciente.id}"></td>
+            <td th:text="${paciente.name}"></td>
+            <td th:text="${paciente.cpf}"></td>
+
+            <td>
+                <button class="btn-show-details" th:data-id="${paciente.id}" th:data-name="${paciente.name}"
+                        th:data-cpf="${paciente.cpf}" th:data-gender="${paciente.gender}"
+                        th:data-dateOfBirth="${paciente.dateOfBirth}"
+                        th:data-telephone="${paciente.telephone}" th:data-email="${paciente.email}"
+                        th:data-address="${paciente.address}">Ver Detalhes</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<div id="patientModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Detalhes do Paciente</h2>
+        <p><strong>ID:</strong> <span id="modalId"></span></p>
+        <p><strong>Nome:</strong> <span id="modalName"></span></p>
+        <p><strong>CPF:</strong> <span id="modalCpf"></span></p>
+        <p><strong>Gênero:</strong> <span id="modalGender"></span></p>
+        <p><strong>Data de Nascimento:</strong> <span id="modalDateOfBirth"></span></p>
+        <p><strong>Telefone:</strong> <span id="modalTelephone"></span></p>
+        <p><strong>Email:</strong> <span id="modalEmail"></span></p>
+        <p><strong>Endereço:</strong> <span id="modalAddress"></span></p>
+    </div>
+</div>
+</div>
+
+<script>
+    // Obtém o modal
+    var modal = document.getElementById("patientModal");
+
+    // Obtém todos os botões de "Ver Detalhes"
+    var btns = document.querySelectorAll(".btn-show-details");
+
+    // Obtém o elemento <span> que fecha o modal
+    var span = document.getElementsByClassName("close")[0];
+
+    // Quando o usuário clicar em um botão de "Ver Detalhes", abre o modal e preenche os dados
+    btns.forEach(function(btn) {
+        btn.addEventListener("click", function() {
+            // Preenche o modal com os dados do paciente
+            document.getElementById("modalId").textContent = btn.getAttribute("data-id");
+            document.getElementById("modalName").textContent = btn.getAttribute("data-name");
+            document.getElementById("modalCpf").textContent = btn.getAttribute("data-cpf");
+            document.getElementById("modalGender").textContent = btn.getAttribute("data-gender");
+            document.getElementById("modalDateOfBirth").textContent = btn.getAttribute("data-dateOfBirth");
+            document.getElementById("modalTelephone").textContent = btn.getAttribute("data-telephone");
+            document.getElementById("modalEmail").textContent = btn.getAttribute("data-email");
+            document.getElementById("modalAddress").textContent = btn.getAttribute("data-address");
+
+            // Mostra o modal
+            modal.style.display = "block";
+        });
+    });
+
+    // Quando o usuário clicar em <span> (x), fecha o modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // Quando o usuário clicar fora do modal, também fecha o modal
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+</body>
+</html>

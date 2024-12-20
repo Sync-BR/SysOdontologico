@@ -1,0 +1,70 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sys Odontológico</title>
+    <link rel="stylesheet" href="./../../src/style/reset.css">
+    <link rel="stylesheet" href="./../../src/style/user/user.css">
+    <link rel="stylesheet" href="./../../src/style/message.css">
+</head>
+<body>
+
+
+<header>
+    <h1>Sys Odontológico</h1>
+    <p>Sua solução para gestão de clínicas odontológicas</p>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="#">Início</a></li>
+        <li><a href="#">Consultas</a></li>
+        <li><a href="#">Pacientes</a></li>
+        <li><a href="#">Sobre</a></li>
+    </ul>
+</nav>
+<div th:if="${message}" class="errorMessage" role="alert">
+    <p th:text="${message}"></p>
+    <button class="close-btn" onclick="this.parentElement.style.display='none'">×</button>
+</div>
+<div th:if="${messageSucess}" class="sucessMessage" role="alert">
+    <p th:text="${messageSucess}"></p>
+    <button class="close-btn" onclick="this.parentElement.style.display='none'">×</button>
+</div>
+
+<div class="container">
+    <div class="section-title">
+        <h2>Bem-vindo ao Sys Odontológico</h2>
+        <p>Aqui você pode gerenciar suas consultas, pacientes e muito mais.</p>
+    </div>
+
+
+    <div class="content-card">
+        <h3>Consultas</h3>
+        <p>Agende, edite e visualize as consultas dos pacientes facilmente.</p>
+        <a href="#">Ver Consultas</a>
+    </div>
+
+    <div class="content-card">
+        <h3>Pacientes</h3>
+        <p>Gerencie os dados dos seus pacientes de forma rápida e eficiente.</p>
+        <a href="#">Ver Pacientes</a>
+        <a href="/registrar/pacientes">Cadastrar paciente</a>
+    </div>
+
+    <div class="content-card">
+        <h3>Relatórios</h3>
+        <p>Acesse os relatórios detalhados sobre atendimentos e tratamentos.</p>
+        <a href="#">Ver Relatórios</a>
+    </div>
+</div>
+
+<footer>
+    <p>Sys Odontológico &copy; 2024</p>
+</footer>
+
+</body>
+</html>

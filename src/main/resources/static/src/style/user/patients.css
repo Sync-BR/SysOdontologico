@@ -1,0 +1,140 @@
+/* Resetando estilos padrões do navegador */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilo básico do body */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    padding: 20px;
+}
+
+/* Estilo do container principal */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo do título principal */
+h1 {
+    text-align: center;
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Estilo do formulário */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Estilo dos fieldsets */
+fieldset {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+/* Estilo das legendas */
+legend {
+    font-weight: bold;
+    color: #555;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+/* Estilo das labels */
+label {
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #555;
+}
+
+/* Estilo dos inputs de texto */
+input[type="text"],
+input[type="email"],
+input[type="date"],
+select {
+    padding: 10px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 100%;
+}
+
+/* Estilo do botão de submit */
+button[type="submit"] {
+    padding: 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+/* Efeito ao passar o mouse no botão */
+button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+/* Estilo das mensagens de erro e sucesso */
+.errorMessage,
+.sucessMessage {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    color: white;
+    text-align: center;
+}
+
+.errorMessage {
+    background-color: #f44336;
+}
+
+.sucessMessage {
+    background-color: #4CAF50;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    margin-left: 15px;
+}
+
+/* Responsividade */
+@media screen and (max-width: 600px) {
+    .container {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    button[type="submit"] {
+        font-size: 14px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="date"],
+    select {
+        font-size: 12px;
+    }
+}

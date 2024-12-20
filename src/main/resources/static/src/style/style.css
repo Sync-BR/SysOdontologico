@@ -1,0 +1,254 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+
+    background-color: #f8f9fa;
+}
+
+h1, h2, h3 {
+    color: #333;
+}
+
+.navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.navbar-brand:hover {
+    color: #0056b3;
+}
+
+.nav-link {
+    color: #555;
+}
+
+.nav-link:hover {
+    color: #007bff;
+}
+
+header {
+    background: linear-gradient(to right, #007bff, #0056b3);
+    color: #fff;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+header p {
+    font-size: 1.2rem;
+}
+
+header .btn {
+    background-color: #fff;
+    color: #007bff;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: none;
+}
+
+
+
+section {
+    padding: 3rem 0;
+}
+.planos {
+    background-color: #f9f9f9;
+    padding: 50px 20px;
+    text-align: center;
+}
+.planos .container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.planos h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+.planos p {
+    font-size: 1.2rem;
+    margin-bottom: 40px;
+    color: #666;
+}
+.planos-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+.plano-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    transition: transform 0.3s ease;
+}
+.plano-card:hover {
+    transform: translateY(-10px);
+}
+.plano-card h3 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    color: #007bff;
+}
+.plano-card p {
+    font-size: 1rem;
+    margin-bottom: 15px;
+    color: #555;
+}
+.plano-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+.plano-card ul li {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    color: #666;
+    position: relative;
+    padding-left: 20px;
+}
+.plano-card ul li::before {
+    content: '\2713';
+    color: #007bff;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+.plano-card button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.plano-card button:hover {
+    background-color: #0056b3;
+}
+.plano-card.destaque {
+    border: 2px solid #007bff;
+}
+.sobre {
+    background-color: #f4f4f9;
+    padding: 60px 20px;
+    text-align: center;
+}
+.sobre .container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+.sobre h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+.sobre p {
+    font-size: 1.2rem;
+    margin-bottom: 40px;
+    color: #555;
+}
+.sobre-info {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+.info-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    transition: transform 0.3s ease;
+}
+.info-item:hover {
+    transform: translateY(-10px);
+}
+.info-item h3 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    color: #007bff;
+}
+.info-item p {
+    font-size: 1rem;
+    margin-bottom: 15px;
+    color: #555;
+}
+.info-item ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.info-item ul li {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    color: #666;
+    position: relative;
+    padding-left: 20px;
+}
+.info-item ul li::before {
+    content: '\2713';
+    color: #007bff;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+.rodape {
+    background-color: #333;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+.rodape .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.rodape-info p {
+    margin: 0;
+    font-size: 1rem;
+}
+.rodape-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 15px;
+}
+.rodape-links li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+.rodape-links li a:hover {
+    color: #007bff;
+}
+.rodape-social a img {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s ease;
+}
+.rodape-social a img:hover {
+    transform: scale(1.2);
+}

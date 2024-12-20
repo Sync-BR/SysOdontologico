@@ -1,5 +1,7 @@
 package com.sync.sysodontologico.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sync.sysodontologico.subscriptions.SubscriptionsType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,29 +15,40 @@ public class ClientDto {
     private int id;
     private String name;
     private String email;
+    private String cpf;
     private String phone;
     private String cep;
     private String address;
     private int houseNumber;
+    private SubscriptionsType subscriptionsType;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserDto user;
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "clinic_id", referencedColumnName = "id")
     private ClinicDto clinic;
 
+    // Criar uma lista de pacientes e exames em clinics. Para os pacientes em cada clinica!
+
     public ClientDto() {
     }
-
     @Override
     public String toString() {
-        return "ClientModel{" +
-                "name='" + name + '\'' +
+        return "ClientDto{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
+                ", cpf='" + cpf + '\'' +
                 ", phone='" + phone + '\'' +
                 ", cep='" + cep + '\'' +
                 ", address='" + address + '\'' +
                 ", houseNumber=" + houseNumber +
+                ", subscriptionsType=" + subscriptionsType +
+                ", userId=" + (user != null ? user.getId() : "N/A") +
+                ", clinicId=" + (clinic != null ? clinic.getId() : "N/A") +
                 '}';
     }
+
+
 }
