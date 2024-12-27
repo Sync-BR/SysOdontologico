@@ -22,7 +22,10 @@ public class ClinicDto {
     private ClientDto client;
     @OneToMany(mappedBy = "clinic", cascade = CascadeType.ALL)
     private List<PatientsDto> patients;
-
+    @OneToMany(mappedBy = "clinic", cascade = CascadeType.ALL)
+    private List<DentistDto> dentists;
+    @OneToMany(mappedBy = "clinic", cascade = CascadeType.ALL)
+    private List<ExamDto> exams;
 
     @Override
     public String toString() {
@@ -34,9 +37,8 @@ public class ClinicDto {
                 ", clinicNumber='" + clinicNumber + '\'' +
                 ", clinicPhone='" + clinicPhone + '\'' +
                 ", clientId=" + (client != null ? client.getId() : "N/A") +
-                ", patientsCount=" + (patients != null ? patients.size() : "N/A") +
+//                ", patientsCount=" + (patients != null ? patients.size() : "N/A") +
+//                ", dentists=" + dentists +
                 '}';
     }
-
-
 }

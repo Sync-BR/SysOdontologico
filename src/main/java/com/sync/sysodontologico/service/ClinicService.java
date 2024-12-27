@@ -1,11 +1,10 @@
 package com.sync.sysodontologico.service;
 
-import com.sync.sysodontologico.controller.Authentication;
+import com.sync.sysodontologico.model.AuthenticationModel;
 import com.sync.sysodontologico.dto.ClientDto;
 import com.sync.sysodontologico.dto.ClinicDto;
 import com.sync.sysodontologico.repository.ClientRepository;
 import com.sync.sysodontologico.repository.ClinicRepository;
-import com.sync.sysodontologico.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +16,11 @@ public class ClinicService {
     private ClientRepository clientRepository;
 
     public boolean register(ClinicDto newClinic) {
-        ClientDto updateClient = Authentication.clientAuthentication;
+        ClientDto updateClient = AuthenticationModel.clientAuthentication;
         updateClient.setClinic(newClinic);
         ClientDto verificationUpdate = clientRepository.save(updateClient);
         if(verificationUpdate != null) {
+            AuthenticationModel.clientAuthentication.setClinic(verificationUpdate.getClinic());
             return true;
         }
         return false;

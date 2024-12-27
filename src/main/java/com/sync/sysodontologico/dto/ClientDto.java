@@ -1,7 +1,7 @@
 package com.sync.sysodontologico.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sync.sysodontologico.subscriptions.SubscriptionsType;
+import com.sync.sysodontologico.enums.SubscriptionsType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,7 +24,6 @@ public class ClientDto {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserDto user;
-    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "clinic_id", referencedColumnName = "id")
     private ClinicDto clinic;

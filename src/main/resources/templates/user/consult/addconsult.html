@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Consultar Consultas</title>
+    <link rel="stylesheet" href="./../../../src/style/message.css">
+</head>
+<body>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    main {
+        width: 100%;
+        max-width: 800px;
+        padding: 20px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #333;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    label {
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 5px;
+    }
+
+    input, textarea, select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+
+    div {
+        display: flex;
+        flex-direction: column;
+    }
+</style>
+
+<div th:if="${message}" class="errorMessage" role="alert">
+    <p th:text="${message}"></p>
+    <button class="close-btn" onclick="this.parentElement.style.display='none'">×</button>
+</div>
+<div th:if="${messageSucess}" class="sucessMessage" role="alert">
+    <p th:text="${messageSucess}"></p>
+    <button class="close-btn" onclick="this.parentElement.style.display='none'">×</button>
+</div>
+
+<main>
+    <h1>Consultar Consultas</h1>
+
+    <form action="/dentist/consult/add" method="post">
+
+        <div>
+            <label for="consultDate">Data e Hora da Consulta:</label>
+            <input type="datetime-local" id="consultDate" name="consultDate" required>
+        </div>
+        <div>
+            <label for="patient">Paciente:</label>
+            <select id="patient" name="patientsDto.id" required>
+                <option value="" disabled selected>Selecione o paciente</option>
+                <option th:each="patient : ${patients}"
+                        th:value="${patient.id}"
+                        th:text="${patient.name}"></option>
+            </select>
+        </div>
+        <div>
+            <label for="dentist">Dentista:</label>
+            <select id="dentist" name="dentist" required>
+                <option value="" disabled selected>Selecione o dentista</option>
+                <option th:each="dentist : ${dentists}"
+                        th:value="${dentist.id}" th:text="${dentist.name}"></option>
+            </select>
+        </div>
+
+        <button type="submit">Consultar Consultas</button>
+    </form>
+
+    <!-- Exibição dos resultados da consulta -->
+    <div th:if="${consults != null}">
+        <h2>Consultas Encontradas</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Paciente</th>
+                <th>CPF do Paciente</th>
+                <th>Dentista</th>
+                <th>CPF do Dentista</th>
+                <th>Data da Consulta</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="consult : ${consults}">
+                <td th:text="${consult.patientName}"></td>
+                <td th:text="${consult.patientCpf}"></td>
+                <td th:text="${consult.dentistName}"></td>
+                <td th:text="${consult.dentistCpf}"></td>
+                <td th:text="${consult.consultDate}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+</body>
+</html>

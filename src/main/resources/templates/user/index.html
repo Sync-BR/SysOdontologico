@@ -23,7 +23,9 @@
         <li><a href="#">Início</a></li>
         <li><a href="#">Consultas</a></li>
         <li><a href="#">Pacientes</a></li>
-        <li><a href="#">Sobre</a></li>
+            <li>
+                <a href="/logout">Sair</a>
+            </li>
     </ul>
 </nav>
 <div th:if="${message}" class="errorMessage" role="alert">
@@ -45,20 +47,21 @@
     <div class="content-card">
         <h3>Consultas</h3>
         <p>Agende, edite e visualize as consultas dos pacientes facilmente.</p>
-        <a href="#">Ver Consultas</a>
+        <a href="/patient/consult/viw">Ver Consultas</a>
     </div>
 
     <div class="content-card">
         <h3>Pacientes</h3>
         <p>Gerencie os dados dos seus pacientes de forma rápida e eficiente.</p>
-        <a href="#">Ver Pacientes</a>
+        <a href="/visualizar/pacientes">Ver Pacientes</a>
         <a href="/registrar/pacientes">Cadastrar paciente</a>
     </div>
 
     <div class="content-card">
-        <h3>Relatórios</h3>
-        <p>Acesse os relatórios detalhados sobre atendimentos e tratamentos.</p>
-        <a href="#">Ver Relatórios</a>
+        <h3>profissionais</h3>
+        <p>Administre os profissionais da sua empresa.</p>
+        <a href="/visualizar/dentista">Visualizar profissionais</a>
+        <a href="/dentista/registrar">Registrar profissionais</a>
     </div>
 </div>
 

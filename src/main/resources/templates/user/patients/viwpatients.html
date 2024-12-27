@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Pacientes</title>
+</head>
+<body>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f7fb;
+        color: #333;
+        padding: 20px;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #4CAF50;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th {
+        background-color: #4CAF50;
+        color: white;
+        padding: 12px;
+        text-align: left;
+        font-weight: normal;
+    }
+
+    td {
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+    }
+    td a{
+        color: white;
+    }
+
+    tr:hover {
+        background-color: #f9f9f9;
+    }
+
+    a {
+        text-decoration: none;
+        color: #007BFF;
+        font-weight: bold;
+    }
+
+    a:hover {
+        text-decoration: underline;
+        color: #0056b3;
+    }
+
+    .btn-details {
+        background-color: #007BFF;
+        color: white;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .btn-details:hover {
+        background-color: #0056b3;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+        padding-top: 60px;
+    }
+
+    .modal-content {
+        background-color: #fff;
+        margin: 5% auto;
+        padding: 20px;
+        border-radius: 8px;
+        width: 80%;
+        max-width: 600px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .close {
+        color: #aaa;
+        font-size: 28px;
+        font-weight: bold;
+        position: absolute;
+        right: 20px;
+        top: 10px;
+        cursor: pointer;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+    }
+
+    .modal-content p {
+        margin-bottom: 10px;
+    }
+
+</style>
+<div class="container">
+    <h2>Lista de Pacientes</h2>
+    <input type="text" id="searchInput" placeholder="Buscar paciente..." style="width: 100%; padding: 10px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 4px;">
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>CPF</th>
+
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody id="tableBody">
+        <tr th:each="paciente : ${pacientes}">
+            <td th:text="${paciente.id}"></td>
+            <td th:text="${paciente.name}"></td>
+            <td th:text="${paciente.cpf}"></td>
+
+            <td>
+                <button class="btn-show-details btn-details" th:data-id="${paciente.id}" th:data-name="${paciente.name}"
+                        th:data-cpf="${paciente.cpf}" th:data-gender="${paciente.gender}"
+                        th:data-dateOfBirth="${paciente.dateOfBirth}"
+                        th:data-telephone="${paciente.telephone}" th:data-email="${paciente.email}"
+                        th:data-address="${paciente.address}">Ver Detalhes</button>
+
+                <a th:href="@{/patient/exam/add/{idPatient}(idPatient=${paciente.id})}" >
+                    <button type="button" class="btn-details">Anexa exame</button>
+                </a>
+                <a th:href="@{/patient/viwer/exam/{idPatient}(idPatient=${paciente.id})}" >
+                    <button type="button" class="btn-details">Visualizar exames</button>
+                </a>
+                <a th:href="@{/patient/consult/add/{idPatient}(idPatient=${paciente.id})}" >
+                    <button type="button" class="btn-details">Agenda consultar</button>
+                </a>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<div id="patientModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Detalhes do Paciente</h2>
+        <p><strong>ID:</strong> <span id="modalId"></span></p>
+        <p><strong>Nome:</strong> <span id="modalName"></span></p>
+        <p><strong>CPF:</strong> <span id="modalCpf"></span></p>
+        <p><strong>Gênero:</strong> <span id="modalGender"></span></p>
+        <p><strong>Data de Nascimento:</strong> <span id="modalDateOfBirth"></span></p>
+        <p><strong>Telefone:</strong> <span id="modalTelephone"></span></p>
+        <p><strong>Email:</strong> <span id="modalEmail"></span></p>
+        <p><strong>Endereço:</strong> <span id="modalAddress"></span></p>
+    </div>
+</div>
+</div>
+
+<script>
+    const searchInput = document.getElementById("searchInput");
+    const tableBody = document.getElementById("tableBody");
+    searchInput.addEventListener("input", function() {
+        const filter = searchInput.value.toLowerCase();
+        const rows = tableBody.getElementsByTagName("tr");
+
+        for (let i = 0; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName("td");
+            let match = false;
+            for (let j = 0; j < cells.length - 1; j++) {
+                if (cells[j].textContent.toLowerCase().includes(filter)) {
+                    match = true;
+                    break;
+                }
+            }
+            rows[i].style.display = match ? "" : "none";
+        }
+    });
+</script>
+
+
+
+<script>
+    var modal = document.getElementById("patientModal");
+    var btns = document.querySelectorAll(".btn-show-details");
+    var span = document.getElementsByClassName("close")[0];
+    btns.forEach(function(btn) {
+        btn.addEventListener("click", function() {
+            document.getElementById("modalId").textContent = btn.getAttribute("data-id");
+            document.getElementById("modalName").textContent = btn.getAttribute("data-name");
+            document.getElementById("modalCpf").textContent = btn.getAttribute("data-cpf");
+            document.getElementById("modalGender").textContent = btn.getAttribute("data-gender");
+            document.getElementById("modalDateOfBirth").textContent = btn.getAttribute("data-dateOfBirth");
+            document.getElementById("modalTelephone").textContent = btn.getAttribute("data-telephone");
+            document.getElementById("modalEmail").textContent = btn.getAttribute("data-email");
+            document.getElementById("modalAddress").textContent = btn.getAttribute("data-address");
+            modal.style.display = "block";
+        });
+    });
+
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+</body>
+</html>

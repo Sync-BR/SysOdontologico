@@ -17,6 +17,10 @@
     <p th:text="${message}"></p>
     <button class="close-btn" onclick="this.parentElement.style.display='none'">×</button>
 </div>
+<div th:if="${messageSucess}" class="sucessMessage" role="alert">
+    <p th:text="${messageSucess}"></p>
+    <button class="close-btn" onclick="this.parentElement.style.display='none'">×</button>
+</div>
 
     <header>
         <nav class="navbar navbar-dark bg-dark fixed-top">

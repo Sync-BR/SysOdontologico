@@ -1,4 +1,4 @@
-package com.sync.sysodontologico.subscriptions;
+package com.sync.sysodontologico.enums;
 
 public enum SubscriptionsType {
     bronze("Bronze"),

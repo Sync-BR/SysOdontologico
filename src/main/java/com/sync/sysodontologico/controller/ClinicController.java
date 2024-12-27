@@ -28,11 +28,15 @@ public class ClinicController {
     }
     @PostMapping("/WEr09VEBRA1rcRXkk10CyhRs5oNmekpCzPLNC1f1qqnplCVOQT8Cr")
     public String registerPatients(PatientsDto patient, RedirectAttributes redirectAttributes) {
-        if(patientsService.register(patient)){
-            redirectAttributes.addFlashAttribute("messageSucess", "Paciente criado com sucesso!");
-            return "redirect:/user/home";
+        if(!patientsService.patientExists(patient)){
+            if (patientsService.register(patient)) {
+                redirectAttributes.addFlashAttribute("messageSucess", "Paciente criado com sucesso!");
+                return "redirect:/user/home";
+            }
+        } else {
+            redirectAttributes.addFlashAttribute("message", "Cpf ou Email existente!");
         }
-        return "redirect:/user/home";
+        return "redirect:/registrar/pacientes";
     }
 
 

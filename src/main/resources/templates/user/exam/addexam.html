@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Exame</title>
+    <link rel="stylesheet" href="./../../../src/style/message.css">
+</head>
+<body>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    main {
+        width: 100%;
+        max-width: 800px;
+        padding: 20px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #333;
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    label {
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 5px;
+    }
+
+    input, textarea, select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+
+    textarea {
+        resize: none;
+    }
+
+    button {
+        width: 100%;
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+
+    div {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .errorMessage, .sucessMessage {
+        margin-bottom: 15px;
+        padding: 10px;
+        border-radius: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #fff;
+    }
+
+    .errorMessage {
+        background-color: #f44336; /* Vermelho */
+    }
+
+    .sucessMessage {
+        background-color: #4CAF50; /* Verde */
+    }
+
+    .close-btn {
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-size: 20px;
+    }
+</style>
+
+<div th:if="${message}" class="errorMessage" role="alert">
+    <p th:text="${message}"></p>
+    <button class="close-btn" onclick="this.parentElement.style.display='none'">×</button>
+</div>
+<div th:if="${messageSucess}" class="sucessMessage" role="alert">
+    <p th:text="${messageSucess}"></p>
+    <button class="close-btn" onclick="this.parentElement.style.display='none'">×</button>
+</div>
+
+<main>
+    <h1>Registrar Exame</h1>
+
+    <form action="/dentist/exam/add" method="post" enctype="multipart/form-data">
+        <div>
+            <label for="description">Observação:</label>
+            <textarea id="description" name="description" rows="3" required></textarea>
+        </div>
+        <div>
+            <label for="tooth">Tipo de Dente:</label>
+            <select id="tooth" name="tooth" required>
+                <option value="" disabled selected>Selecione o dente</option>
+                <option th:each="tooth : ${T(com.sync.sysodontologico.enums.ToothEnum).values()}"
+                        th:value="${tooth}"
+                        th:text="${#strings.replace(tooth.description, '_', ' ')}"></option>
+            </select>
+        </div>
+        <div>
+            <label for="examType">Tipo de Exame:</label>
+            <select id="examType" name="examType" required>
+                <option value="" disabled selected>Selecione o tipo</option>
+                <option th:each="type : ${T(com.sync.sysodontologico.enums.TypeExam).values()}"
+                        th:value="${type}"
+                        th:text="${#strings.replace(type, '_', ' ')}"></option>
+            </select>
+        </div>
+
+        <div>
+            <label for="media">Upload de Mídia (Imagem/Vídeo):</label>
+            <input type="file" id="media" name="mediaFile" accept="image/*,video/*" required>
+        </div>
+
+        <div>
+            <label for="patient">Paciente:</label>
+            <select id="patient" name="patients" required>
+                <option value="" disabled selected>Selecione o paciente</option>
+                <option th:each="patient : ${patients}"
+                        th:value="${patient.id}" th:text="${patient.name}"></option>
+            </select>
+        </div>
+
+        <div>
+            <label for="dentist">Dentista:</label>
+            <select id="dentist" name="dentist" required>
+                <option value="" disabled selected>Selecione o dentista</option>
+                <option th:each="dentist : ${dentists}"
+                        th:value="${dentist.id}" th:text="${dentist.name}"></option>
+            </select>
+        </div>
+
+        <div>
+            <button type="submit">Salvar Exame</button>
+        </div>
+    </form>
+</main>
+</body>
+</html>

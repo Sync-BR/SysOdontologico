@@ -18,6 +18,7 @@ public class UserService {
 
     public boolean getClinicById(Long id) {
         Optional<ClientDto> client = clientRepository.findByClinicId(id);
+
         if(client.isPresent()) {
             ClientDto clientDto = client.get();
             if(clientDto.getClinic().getId() == 0) {
