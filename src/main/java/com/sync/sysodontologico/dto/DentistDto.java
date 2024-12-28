@@ -21,6 +21,9 @@ public class DentistDto {
     private String phone;
     private LocalDate dateOfBirth;
     private String address;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private UserDto user;
     @OneToMany(mappedBy = "dentist")
     private List<ExamDto> exams;
     @OneToMany(mappedBy = "dentist", cascade = CascadeType.ALL, orphanRemoval = true)

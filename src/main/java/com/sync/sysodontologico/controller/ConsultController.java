@@ -23,10 +23,8 @@ public class ConsultController {
     private DentistService dentistService;
 
 
-
-
     @PostMapping("/dentist/consult/add")
-    public String registerConsult(ConsultDto newConsult, @RequestParam("patientsDto.id") Long patientId,@RequestParam("dentist") Long dentistId, RedirectAttributes redirectAttributes) {
+    public String registerConsult(ConsultDto newConsult, @RequestParam("patientsDto.id") Long patientId, @RequestParam("dentist") Long dentistId, RedirectAttributes redirectAttributes) {
         if (newConsult != null) {
             PatientsDto datePatient = patientsService.getPatientById(patientId);
             DentistDto dateDentist = dentistService.getDentistById(dentistId);
@@ -34,7 +32,11 @@ public class ConsultController {
             newConsult.setPatientCpf(datePatient.getCpf());
             newConsult.setDentistName(dateDentist.getName());
             newConsult.setDentistCpf(dateDentist.getCpf());
-            newConsult.setClinicId(AuthenticationModel.clientAuthentication.getClinic().getId());
+            if (AuthenticationModel.clientAuthentication != null) {
+                newConsult.setClinicId(AuthenticationModel.clientAuthentication.getClinic().getId());
+            } else if(AuthenticationModel.dentistAuthentication != null) {
+                newConsult.setClinicId(AuthenticationModel.dentistAuthentication.getClinic().getId());
+            }
             if (consultService.addConsult(newConsult)) {
                 redirectAttributes.addFlashAttribute("messageSucess", "Consulta marcado com sucesso!");
             } else {

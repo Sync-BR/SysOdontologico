@@ -11,19 +11,23 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ExamService extends HistoryService{
+public class ExamService extends HistoryService {
     @Autowired
     private ExamRepository examRepository;
     @Autowired
     private HistoryRepository historyRepository;
 
-    public List<ExamDto> getAllExamsById(long id){
-        return examRepository.findExamsByPatientAndClinic(id, (long)AuthenticationModel.clientAuthentication.getClinic().getId());
+    public List<ExamDto> getAllExamsById(long id) {
+        if (AuthenticationModel.clientAuthentication != null)
+            return examRepository.findExamsByPatientAndClinic(id, (long) AuthenticationModel.clientAuthentication.getClinic().getId());
+        if (AuthenticationModel.dentistAuthentication != null)
+            return examRepository.findExamsByPatientAndClinic(id, (long) AuthenticationModel.dentistAuthentication.getClinic().getId());
+        return null;
     }
 
     public boolean register(ExamDto examDto) {
         ExamDto exam = examRepository.save(examDto);
-        if(exam != null) {
+        if (exam != null) {
             HistoryDto historyLog = new HistoryDto(exam.getId(), exam.getPatients().getId(), exam.getDentist().getId(), exam.getExamType().getDescription(), exam.getClinic().getId());
             historyRepository.save(historyLog);
             return true;

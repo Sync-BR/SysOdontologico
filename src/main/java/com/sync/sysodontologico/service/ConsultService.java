@@ -12,13 +12,19 @@ import java.util.List;
 public class ConsultService {
     @Autowired
     private ConsultRepository consultRepository;
+
     public List<ConsultDto> getAllConsults() {
-        return consultRepository.getConsultByClinicId((long) AuthenticationModel.clientAuthentication.getClinic().getId());
+        if (AuthenticationModel.clientAuthentication != null) {
+            return consultRepository.getConsultByClinicId((long) AuthenticationModel.clientAuthentication.getClinic().getId());
+        } else if (AuthenticationModel.dentistAuthentication != null) {
+            return consultRepository.getConsultByClinicId((long) AuthenticationModel.dentistAuthentication.getClinic().getId());
+        }
+        return null ;
     }
 
     public boolean addConsult(ConsultDto newConsult) {
         ConsultDto verification = consultRepository.save(newConsult);
-        if(verification != null) {
+        if (verification != null) {
             return true;
         }
         return false;

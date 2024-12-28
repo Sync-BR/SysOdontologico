@@ -3,7 +3,6 @@ package com.sync.sysodontologico.dto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.catalina.User;
 
 @Getter
 @Setter
@@ -16,6 +15,8 @@ public class UserDto {
     private String password;
     @OneToOne(mappedBy = "user")
     private ClientDto client;
+    @OneToOne(mappedBy = "user")
+    private DentistDto dentist;
 
     public UserDto() {
     }
@@ -28,6 +29,7 @@ public class UserDto {
                 "username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", clientId=" + (client != null ? client.getId() : "N/A") +
+                ", dentisId=" + (dentist != null ? dentist.getId() : "N/A") +
                 '}';
     }
 

@@ -27,7 +27,11 @@ public class ExamController {
             String uploadedFilePath = serviceUpload.uploadExam(mediaFile);
             if (uploadedFilePath != null) {
                 newExam.setMediaPatch(uploadedFilePath);
-                newExam.setClinic(AuthenticationModel.clientAuthentication.getClinic());
+                if (AuthenticationModel.clientAuthentication != null) {
+                    newExam.setClinic(AuthenticationModel.clientAuthentication.getClinic());
+                } else if (AuthenticationModel.dentistAuthentication != null) {
+                    newExam.setClinic(AuthenticationModel.dentistAuthentication.getClinic());
+                }
 
                 if (examService.register(newExam)) {
                     redirectAttributes.addFlashAttribute("messageSucess", "Exame adicionado com sucesso!");

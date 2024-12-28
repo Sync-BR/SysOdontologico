@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,17 +21,26 @@ public class DentistService {
             return true;
         }
         DentistDto checkEmail = dentistRepository.findByClinicIdAndEmail((long) AuthenticationModel.clientAuthentication.getClinic().getId(), dentist.getEmail());
-        if(checkEmail != null) {
+        if (checkEmail != null) {
             return true;
         }
         return false;
     }
+
     public DentistDto getDentistById(Long id) {
         return dentistRepository.findById(id).get();
     }
-    public List<DentistDto> getAllDentist(){
-       return dentistRepository.getDentistById(AuthenticationModel.clientAuthentication.getClinic().getId());
+
+    public List<DentistDto> getAllDentist() {
+        if (AuthenticationModel.clientAuthentication != null) {
+            return dentistRepository.getDentistById(AuthenticationModel.clientAuthentication.getClinic().getId());
+        } else if (AuthenticationModel.dentistAuthentication != null) {
+            List<DentistDto> dentist = new ArrayList<>();
+            dentist.add(AuthenticationModel.dentistAuthentication);
+            return dentist;}
+        return null;
     }
+
     @Transactional
     public DentistDto register(DentistDto dentistDto) {
         dentistDto.setClinic(AuthenticationModel.clientAuthentication.getClinic());

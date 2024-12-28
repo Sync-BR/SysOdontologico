@@ -22,7 +22,14 @@ public class PatientsService {
         return patientsRepository.findById(id);
     }
     public List<PatientsDto> getAllPatients() {
-        return patientsRepository.getPatientsById(AuthenticationModel.clientAuthentication.getClinic().getId());
+        if(AuthenticationModel.clientAuthentication != null){
+
+            return patientsRepository.getPatientsById(AuthenticationModel.clientAuthentication.getClinic().getId());
+        } else if (AuthenticationModel.dentistAuthentication != null){
+            return patientsRepository.getPatientsById(AuthenticationModel.dentistAuthentication.getClinic().getId());
+
+        }
+        return null;
     }
     public PatientsDto getPatientById(Long id) {
         return patientsRepository.findById(id).get();

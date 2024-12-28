@@ -96,7 +96,6 @@
                 <th>CPF do Paciente</th>
                 <th>Dentista</th>
                 <th>CPF do Dentista</th>
-                <th>Clínica</th>
                 <th>Data da Consulta</th>
             </tr>
             </thead>
@@ -107,7 +106,6 @@
                 <td th:text="${consult.patientCpf}"></td>
                 <td th:text="${consult.dentistName}"></td>
                 <td th:text="${consult.dentistCpf}"></td>
-                <td th:text="${consult.clinicId}"></td>
                 <td th:text="${#temporals.format(consult.consultDate, 'dd/MM/yyyy HH:mm')}"></td>
             </tr>
             </tbody>

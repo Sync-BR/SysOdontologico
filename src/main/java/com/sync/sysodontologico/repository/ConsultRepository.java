@@ -10,5 +10,4 @@ import java.util.List;
 public interface ConsultRepository extends JpaRepository<ConsultDto, Long> {
     @Query(value = "SELECT * FROM CONSULT WHERE clinic_id = :clinicId", nativeQuery = true)
     List<ConsultDto> getConsultByClinicId(@Param("clinicId") Long clinicId);
-
 }

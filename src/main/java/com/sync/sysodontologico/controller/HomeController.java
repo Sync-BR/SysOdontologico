@@ -3,6 +3,7 @@ package com.sync.sysodontologico.controller;
 import com.sync.sysodontologico.model.AuthenticationModel;
 import com.sync.sysodontologico.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,7 @@ public class HomeController {
     private ConsultService consultService;
     @Autowired
     private ExamService examService;
+
     //Controller e paginas inicias
     @GetMapping("/")
     public String home() {
@@ -46,9 +48,14 @@ public class HomeController {
     public String userHome(Model model) {
         if (AuthenticationModel.clientAuthentication != null) {
             if (AuthenticationModel.clientAuthentication.getClinic() != null) {
+                model.addAttribute("clientAuthentication", AuthenticationModel.clientAuthentication);
                 return "user/index";
             } else {
                 return "redirect:/clinic/register";
+            }
+        } else if (AuthenticationModel.dentistAuthentication != null) {
+            if (AuthenticationModel.dentistAuthentication.getClinic() != null) {
+                return "user/index";
             }
         }
         return "redirect:/";
@@ -72,6 +79,8 @@ public class HomeController {
     public String registerPatient() {
         if (AuthenticationModel.clientAuthentication != null) {
             return "user/clinic/patients";
+        } else if (AuthenticationModel.dentistAuthentication != null) {
+            return "user/clinic/patients";
         }
         return "redirect:/";
     }
@@ -81,6 +90,10 @@ public class HomeController {
         if (AuthenticationModel.clientAuthentication != null) {
             model.addAttribute("pacientes", patientsService.getAllPatients());
             return "user/patients/viwpatients";
+        } else if (AuthenticationModel.dentistAuthentication != null) {
+            model.addAttribute("pacientes", patientsService.getAllPatients());
+            return "user/patients/viwpatients";
+
         }
         return "redirect:/";
     }
@@ -108,8 +121,7 @@ public class HomeController {
     //Controle de exames
     @GetMapping("/patient/exam/add/{idPatient}")
     public String addPatientExam(@PathVariable int idPatient, Model model) {
-        System.out.println(idPatient);
-        if (AuthenticationModel.clientAuthentication != null) {
+        if (AuthenticationModel.clientAuthentication != null || AuthenticationModel.dentistAuthentication != null) {
             model.addAttribute("patients", patientsService.getPatientById(idPatient));
             model.addAttribute("dentists", dentistService.getAllDentist());
             return "user/exam/addexam";
@@ -119,8 +131,7 @@ public class HomeController {
 
     @GetMapping("/patient/viwer/exam/{idPatient}")
     public String getExamPatient(@PathVariable int idPatient, Model model) {
-        System.out.println("passei");
-        if (AuthenticationModel.clientAuthentication != null) {
+        if (AuthenticationModel.clientAuthentication != null || AuthenticationModel.dentistAuthentication != null) {
             model.addAttribute("patients", examService.getAllExamsById(idPatient));
             return "user/exam/viwexam";
         }
@@ -134,12 +145,19 @@ public class HomeController {
             model.addAttribute("patients", patientsService.getPatientById(idPatient));
             model.addAttribute("dentists", dentistService.getAllDentist());
             return "user/consult/addconsult";
+        } else if (AuthenticationModel.dentistAuthentication != null) {
+            System.out.println("Dados do dentista: " + AuthenticationModel.dentistAuthentication);
+            model.addAttribute("patients", patientsService.getPatientById(idPatient));
+            model.addAttribute("dentists", dentistService.getAllDentist());
+            return "user/consult/addconsult";
+
         }
         return "redirect:/";
     }
+
     @GetMapping("/patient/consult/viw")
-    public String getAllConsult(Model model){
-        if(AuthenticationModel.clientAuthentication != null){
+    public String getAllConsult(Model model) {
+        if (AuthenticationModel.clientAuthentication != null || AuthenticationModel.dentistAuthentication != null) {
             model.addAttribute("consults", consultService.getAllConsults());
             return "user/consult/viwconsults";
         }

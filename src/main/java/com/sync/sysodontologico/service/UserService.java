@@ -38,12 +38,10 @@ public class UserService {
         return null;
     }
 
-    public boolean login(UserDto user) {
-        UserDto verificationUser = userRepository.findByUsername(user.getUsername());
-        if (verificationUser != null) {
-            return verificationUser.getPassword().equals(user.getPassword());
-        }
-        return false;
+    public UserDto login(UserDto user) {
+
+
+        return  userRepository.findByUsername(user.getUsername());
     }
 
 

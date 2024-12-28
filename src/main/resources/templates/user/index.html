@@ -57,7 +57,7 @@
         <a href="/registrar/pacientes">Cadastrar paciente</a>
     </div>
 
-    <div class="content-card">
+    <div class="content-card"  th:if="${clientAuthentication != null}">
         <h3>profissionais</h3>
         <p>Administre os profissionais da sua empresa.</p>
         <a href="/visualizar/dentista">Visualizar profissionais</a>

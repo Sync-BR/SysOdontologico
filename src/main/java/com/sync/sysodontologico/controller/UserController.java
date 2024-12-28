@@ -1,6 +1,7 @@
 package com.sync.sysodontologico.controller;
 
 import com.sync.sysodontologico.dto.ClientDto;
+import com.sync.sysodontologico.dto.DentistDto;
 import com.sync.sysodontologico.dto.UserDto;
 import com.sync.sysodontologico.model.AuthenticationModel;
 import com.sync.sysodontologico.service.UserService;
@@ -17,6 +18,7 @@ import java.util.Optional;
 public class UserController {
     @Autowired
     private UserService userService;
+
     @GetMapping("/logout")
     public String logout() {
         AuthenticationModel.clientAuthentication = null;
@@ -25,13 +27,24 @@ public class UserController {
 
     @PostMapping("/U2FsdGVkX1+SVZbYQbDGn8Lli+o6A2wE8SiLvyMX29w=")
     public String login(UserDto user, RedirectAttributes redirectAttributes) {
-        if (userService.login(user)) {
-            Optional<ClientDto> clientOpt = userService.getClientByUsername(user.getUsername());
-            if (clientOpt.isPresent()) {
-                AuthenticationModel.clientAuthentication = clientOpt.get();
+        UserDto userAuthentication = userService.login(user);
+        if (userAuthentication != null) {
+            if (userAuthentication.getClient() != null) {
+                AuthenticationModel.clientAuthentication = userAuthentication.getClient();
+
+            } else if(userAuthentication.getDentist() != null) {
+                AuthenticationModel.dentistAuthentication = userAuthentication.getDentist();
+
             }
-            return "redirect:/user/index/" + user.getUsername() + "/" + user.getPassword();
+            return "redirect:/user/home";
         }
+//        if (userService.login(user)) {
+//            if (clientOpt.isPresent()) {
+//                Optional<ClientDto> clientOpt = userService.getClientByUsername(user.getUsername());
+//                AuthenticationModel.clientAuthentication = clientOpt.get();
+//            }
+//            return "redirect:/user/index/" + user.getUsername() + "/" + user.getPassword();
+//        }
         redirectAttributes.addFlashAttribute("message", "Login ou senha incorretar");
         return "redirect:/";
     }
