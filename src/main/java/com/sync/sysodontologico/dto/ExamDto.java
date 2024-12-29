@@ -24,6 +24,7 @@ public class ExamDto {
     private TypeExam examType;
     private String mediaPatch;
     private ToothEnum tooth;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "dentist_id", referencedColumnName = "id")
     private DentistDto dentist;

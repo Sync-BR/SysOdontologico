@@ -24,11 +24,14 @@ public class PatientsDto {
     private String address;
     private String cep;
     private int houseNumber;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "clinic_id", referencedColumnName = "id")
     private ClinicDto clinic;
+    @JsonIgnore
     @OneToMany(mappedBy = "patients", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ExamDto> exams;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "dentist_id", referencedColumnName = "id")
     private DentistDto dentist;

@@ -1,5 +1,6 @@
 package com.sync.sysodontologico.service;
 
+import com.sync.sysodontologico.dto.DentistDto;
 import com.sync.sysodontologico.model.AuthenticationModel;
 import com.sync.sysodontologico.dto.ClientDto;
 import com.sync.sysodontologico.dto.ClinicDto;
@@ -18,49 +19,88 @@ public class PatientsService {
     private PatientsRepository patientsRepository;
     @Autowired
     private ClientRepository clientRepository;
-    public PatientsDto getPatientById(long id){
+
+    public PatientsDto getPatientById(long id) {
         return patientsRepository.findById(id);
     }
-    public List<PatientsDto> getAllPatients() {
-        if(AuthenticationModel.clientAuthentication != null){
 
+    public List<PatientsDto> getAllPatients() {
+        if (AuthenticationModel.clientAuthentication != null) {
             return patientsRepository.getPatientsById(AuthenticationModel.clientAuthentication.getClinic().getId());
-        } else if (AuthenticationModel.dentistAuthentication != null){
+        } else if (AuthenticationModel.dentistAuthentication != null) {
             return patientsRepository.getPatientsById(AuthenticationModel.dentistAuthentication.getClinic().getId());
 
         }
         return null;
     }
+
     public PatientsDto getPatientById(Long id) {
         return patientsRepository.findById(id).get();
     }
+
     public boolean patientExists(PatientsDto patient) {
         //Fazer uma condição para verificar o id do paciente para saber se existte na quela clinica!!!
-
-        PatientsDto existsCpf = patientsRepository.findByClinicIdAndCpf((long) AuthenticationModel.clientAuthentication.getClinic().getId(), patient.getCpf());
-        if(existsCpf != null) {
+        PatientsDto existsCpf = new PatientsDto();
+        PatientsDto existsEmail = new PatientsDto();
+        if (AuthenticationModel.clientAuthentication != null) {
+            existsCpf = patientsRepository.findByClinicIdAndCpf((long) AuthenticationModel.clientAuthentication.getClinic().getId(), patient.getCpf());
+            existsEmail = patientsRepository.findByClinicIdAndEmail((long) AuthenticationModel.clientAuthentication.getClinic().getId(), patient.getEmail());
+        } else if (AuthenticationModel.dentistAuthentication != null) {
+            existsCpf = patientsRepository.findByClinicIdAndCpf((long) AuthenticationModel.dentistAuthentication.getClinic().getId(), patient.getCpf());
+            existsEmail = patientsRepository.findByClinicIdAndEmail((long) AuthenticationModel.dentistAuthentication.getClinic().getId(), patient.getEmail());
+        }
+        if (existsCpf != null) {
             return true;
         }
-        PatientsDto existsEmail = patientsRepository.findByClinicIdAndEmail((long) AuthenticationModel.clientAuthentication.getClinic().getId(), patient.getEmail());
-        if(existsEmail != null) {
+        if (existsEmail != null) {
             return true;
         }
         return false;
     }
 
     public boolean register(PatientsDto patient) {
-        patient.setClinic(AuthenticationModel.clientAuthentication.getClinic());
-        List<PatientsDto> listPatients = new ArrayList<>();
-        listPatients.add(patient);
-        ClientDto clientDto = AuthenticationModel.clientAuthentication;
-        ClinicDto clinicDto = clientDto.getClinic();
-        clinicDto.setPatients(listPatients);
-        clientDto.setClinic(clinicDto);
-        ClientDto coppy = clientRepository.save(clientDto);
-        if(coppy != null) {
+        List<PatientsDto> patients = new ArrayList<>();
+        ClientDto clientDate = new ClientDto();
+        ClinicDto clinicDate = new ClinicDto();
+        if (AuthenticationModel.clientAuthentication != null) {
+            patient.setClinic(AuthenticationModel.clientAuthentication.getClinic());
+            clientDate = AuthenticationModel.clientAuthentication;
+            clientDate.setClinic(AuthenticationModel.clientAuthentication.getClinic());
+            clinicDate = clientDate.getClinic();
+
+
+        } else if (AuthenticationModel.dentistAuthentication != null) {
+            patient.setClinic(AuthenticationModel.dentistAuthentication.getClinic());
+            clientDate = AuthenticationModel.dentistAuthentication.getClinic().getClient();
+            clientDate.setClinic(AuthenticationModel.dentistAuthentication.getClinic());
+            clinicDate = clientDate.getClinic();
+        }
+        clinicDate.setClient(clientDate);
+        patients.add(patient);
+        clinicDate.setPatients(patients);
+        ClientDto isSuccess = clientRepository.save(clientDate);
+        if (isSuccess != null) {
             return true;
         }
-
         return false;
+
+//
+//        List<PatientsDto> listPatients = new ArrayList<>();
+//        listPatients.add(patient);
+//        ClientDto clientDto = new ClientDto();
+//        if (AuthenticationModel.clientAuthentication != null) {
+//        } else if (AuthenticationModel.dentistAuthentication != null) {
+//            System.out.println("Dados cliente: " + AuthenticationModel.dentistAuthentication.getClinic().getClient());
+//        }
+//        ClinicDto clinicDto = clientDto.getClinic();
+//        clinicDto.setPatients(listPatients);
+//        clientDto.setClinic(clinicDto);
+//        ClientDto coppy = clientRepository.save(clientDto);
+//        if (coppy != null) {
+//            return true;
+//        } else {
+//
+//            return false;
+//        }
     }
 }

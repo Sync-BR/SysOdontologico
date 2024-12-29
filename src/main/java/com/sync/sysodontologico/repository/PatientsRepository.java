@@ -15,6 +15,7 @@ public interface PatientsRepository extends JpaRepository<PatientsDto, Long> {
     PatientsDto findByClinicIdAndCpf(@Param("clinicId") Long clinicId, @Param("cpf") String cpf);
     @Query(value = "SELECT * FROM PATIENTS WHERE CLINIC_ID = :clinicId AND EMAIL = :email", nativeQuery = true)
     PatientsDto findByClinicIdAndEmail(@Param("clinicId") Long clinicId, @Param("email") String email);
-
+    @Query(value = "SELECT * FROM PATIENTS WHERE CLINIC_ID = :clinicId AND ID = :id", nativeQuery = true)
+    List<PatientsDto> findByClinicIdAndPatientID(@Param("clinicId") Long clinicId, @Param("id") int idPatient);
 
 }

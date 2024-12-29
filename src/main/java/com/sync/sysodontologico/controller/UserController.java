@@ -21,7 +21,11 @@ public class UserController {
 
     @GetMapping("/logout")
     public String logout() {
-        AuthenticationModel.clientAuthentication = null;
+        if (AuthenticationModel.clientAuthentication != null) {
+            AuthenticationModel.clientAuthentication = null;
+        } else if(AuthenticationModel.dentistAuthentication != null) {
+            AuthenticationModel.dentistAuthentication = null;
+        }
         return "redirect:/";
     }
 
@@ -31,20 +35,11 @@ public class UserController {
         if (userAuthentication != null) {
             if (userAuthentication.getClient() != null) {
                 AuthenticationModel.clientAuthentication = userAuthentication.getClient();
-
-            } else if(userAuthentication.getDentist() != null) {
+            } else if (userAuthentication.getDentist() != null) {
                 AuthenticationModel.dentistAuthentication = userAuthentication.getDentist();
-
             }
             return "redirect:/user/home";
         }
-//        if (userService.login(user)) {
-//            if (clientOpt.isPresent()) {
-//                Optional<ClientDto> clientOpt = userService.getClientByUsername(user.getUsername());
-//                AuthenticationModel.clientAuthentication = clientOpt.get();
-//            }
-//            return "redirect:/user/index/" + user.getUsername() + "/" + user.getPassword();
-//        }
         redirectAttributes.addFlashAttribute("message", "Login ou senha incorretar");
         return "redirect:/";
     }
@@ -70,8 +65,6 @@ public class UserController {
                 redirectAttributes.addFlashAttribute("message", "Erro de processamento");
                 break;
         }
-
-
         return "redirect:/";
     }
 }

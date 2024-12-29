@@ -33,4 +33,17 @@ public class HistoryDto {
         this.idClinic = idClinic;
         examDate = LocalDate.now();
     }
+
+    @Override
+    public String toString() {
+        return "HistoryDto{" +
+                "id=" + id +
+                ", idExam=" + idExam +
+                ", idPatient=" + idPatient +
+                ", idDoctor=" + idDoctor +
+                ", idClinic=" + idClinic +
+                ", exam='" + exam + '\'' +
+                ", examDate=" + examDate +
+                '}';
+    }
 }

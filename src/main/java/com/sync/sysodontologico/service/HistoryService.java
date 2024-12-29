@@ -1,16 +1,42 @@
 package com.sync.sysodontologico.service;
 
+import com.sync.sysodontologico.dto.ClientDto;
+import com.sync.sysodontologico.dto.DentistDto;
 import com.sync.sysodontologico.dto.HistoryDto;
+import com.sync.sysodontologico.dto.PatientsDto;
+import com.sync.sysodontologico.repository.ClientRepository;
+import com.sync.sysodontologico.repository.DentistRepository;
 import com.sync.sysodontologico.repository.HistoryRepository;
+import com.sync.sysodontologico.repository.PatientsRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class HistoryService {
+    @Autowired
     private HistoryRepository historyRepository;
+    @Autowired
+    private ClientRepository clientRepository;
+    @Autowired
+    private DentistRepository dentistRepository;
+    @Autowired
+    private PatientsRepository patientsRepository;
 
-    public void registerHistory(HistoryDto history) {
-        System.out.println(history);
-        historyRepository.save(history);
+    public List<PatientsDto> getHistoryByDentis(int dentistId) {
+        DentistDto dentistDto = dentistRepository.findById((long) dentistId).get();
+        System.out.println("Log do dentista: " + dentistDto);
+        List<HistoryDto> histories = historyRepository.findByDoctorId(dentistDto.getId());
+        System.out.println("Log do historico: " + histories);
+        List<PatientsDto> patientData = new ArrayList<>();
+        for (HistoryDto historyDto : histories) {
+            List<PatientsDto> patients = patientsRepository.findByClinicIdAndPatientID((long) historyDto.getIdClinic(), historyDto.getIdPatient());
+            patientData.addAll(patients);
+        }
+        System.out.println("Dados do paciente: " + patientData);
+        return patientData;
     }
 
 }

@@ -21,8 +21,6 @@ public class ExamController {
 
     @PostMapping("/dentist/exam/add")
     public String register(ExamDto newExam, MultipartFile mediaFile, RedirectAttributes redirectAttributes) {
-
-
         if (newExam != null && mediaFile != null && !mediaFile.isEmpty()) {
             String uploadedFilePath = serviceUpload.uploadExam(mediaFile);
             if (uploadedFilePath != null) {
@@ -31,8 +29,9 @@ public class ExamController {
                     newExam.setClinic(AuthenticationModel.clientAuthentication.getClinic());
                 } else if (AuthenticationModel.dentistAuthentication != null) {
                     newExam.setClinic(AuthenticationModel.dentistAuthentication.getClinic());
+                } else {
+                    return "redirect:/";
                 }
-
                 if (examService.register(newExam)) {
                     redirectAttributes.addFlashAttribute("messageSucess", "Exame adicionado com sucesso!");
                 } else {

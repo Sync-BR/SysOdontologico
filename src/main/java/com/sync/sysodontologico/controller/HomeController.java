@@ -3,7 +3,7 @@ package com.sync.sysodontologico.controller;
 import com.sync.sysodontologico.model.AuthenticationModel;
 import com.sync.sysodontologico.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class HomeController {
-    @Autowired
-    private UserService userService;
+
     @Autowired
     private PatientsService patientsService;
     @Autowired
@@ -21,23 +20,22 @@ public class HomeController {
     private ConsultService consultService;
     @Autowired
     private ExamService examService;
+    @Autowired
+    private HistoryService historyService;
 
     //Controller e paginas inicias
     @GetMapping("/")
     public String home() {
+        if(AuthenticationModel.clientAuthentication != null){
+            AuthenticationModel.clientAuthentication = null;
+        } else if(AuthenticationModel.dentistAuthentication != null){
+            AuthenticationModel.dentistAuthentication = null;
+        }
         return "index";
     }
 
 
-    //Controller de pagina de registro & login
-    @GetMapping("/user/index/{username}/{password}")
-    public String userLogin(@PathVariable String username, @PathVariable String password) {
-        if (username != null && password != null) {
-            return "redirect:/user/home";
-        }
-        return "redirect:/";
-    }
-
+    //Controller de registro
     @GetMapping("/user/register")
     public String userRegister() {
         return "user/register";
@@ -64,8 +62,8 @@ public class HomeController {
 
     @GetMapping("/clinic/register")
     public String clinicRegister() {
-        if (AuthenticationModel.clientAuthentication != null) {
-            if (AuthenticationModel.clientAuthentication.getClinic() != null) {
+        if (AuthenticationModel.clientAuthentication != null || AuthenticationModel.dentistAuthentication != null) {
+            if (AuthenticationModel.clientAuthentication.getClinic() != null || AuthenticationModel.dentistAuthentication != null) {
                 return "redirect:/user/home";
             }
         } else {
@@ -77,45 +75,48 @@ public class HomeController {
     //Paginação pacientes
     @GetMapping("/registrar/pacientes")
     public String registerPatient() {
-        if (AuthenticationModel.clientAuthentication != null) {
-            return "user/clinic/patients";
-        } else if (AuthenticationModel.dentistAuthentication != null) {
+        if (AuthenticationModel.clientAuthentication != null || AuthenticationModel.dentistAuthentication != null) {
             return "user/clinic/patients";
         }
         return "redirect:/";
     }
 
     @GetMapping("/visualizar/pacientes")
-    public String visualizarPatient(Model model) {
-        if (AuthenticationModel.clientAuthentication != null) {
+    public String viewerPatient(Model model) {
+        if (AuthenticationModel.clientAuthentication != null || AuthenticationModel.dentistAuthentication != null) {
             model.addAttribute("pacientes", patientsService.getAllPatients());
             return "user/patients/viwpatients";
-        } else if (AuthenticationModel.dentistAuthentication != null) {
-            model.addAttribute("pacientes", patientsService.getAllPatients());
-            return "user/patients/viwpatients";
-
         }
         return "redirect:/";
     }
 
+
     // Pagina para controller de dentista
     @GetMapping("/dentista/registrar")
-    public String registarDentista() {
+    public String registerDentist() {
         if (AuthenticationModel.clientAuthentication != null) {
             return "user/dentist/register";
         }
         return "redirect:/";
 
     }
-
     @GetMapping("/visualizar/dentista")
-    public String visualizarDentista(Model model) {
+    public String viwerDentista(Model model) {
         if (AuthenticationModel.clientAuthentication != null) {
             model.addAttribute("dentist", dentistService.getAllDentist());
             return "user/dentist/viwdentist";
         }
         return "redirect:/";
 
+    }
+    @GetMapping("/hisotory/dentist/{idDentist}")
+    public String viwerHistoryDentista(@PathVariable int idDentist, Model model) {
+        if (AuthenticationModel.clientAuthentication != null) {
+            System.out.println(historyService.getHistoryByDentis(idDentist));
+            model.addAttribute("dentist", historyService.getHistoryByDentis(idDentist));
+            return "user/history/dentist";
+        }
+        return "redirect:/";
     }
 
     //Controle de exames
@@ -141,16 +142,10 @@ public class HomeController {
     //Controle de consultas
     @GetMapping("/patient/consult/add/{idPatient}")
     public String addConsult(Model model, @PathVariable int idPatient) {
-        if (AuthenticationModel.clientAuthentication != null) {
+        if (AuthenticationModel.clientAuthentication != null || AuthenticationModel.dentistAuthentication != null) {
             model.addAttribute("patients", patientsService.getPatientById(idPatient));
             model.addAttribute("dentists", dentistService.getAllDentist());
             return "user/consult/addconsult";
-        } else if (AuthenticationModel.dentistAuthentication != null) {
-            System.out.println("Dados do dentista: " + AuthenticationModel.dentistAuthentication);
-            model.addAttribute("patients", patientsService.getPatientById(idPatient));
-            model.addAttribute("dentists", dentistService.getAllDentist());
-            return "user/consult/addconsult";
-
         }
         return "redirect:/";
     }

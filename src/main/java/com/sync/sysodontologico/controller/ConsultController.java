@@ -25,27 +25,30 @@ public class ConsultController {
 
     @PostMapping("/dentist/consult/add")
     public String registerConsult(ConsultDto newConsult, @RequestParam("patientsDto.id") Long patientId, @RequestParam("dentist") Long dentistId, RedirectAttributes redirectAttributes) {
-        if (newConsult != null) {
-            PatientsDto datePatient = patientsService.getPatientById(patientId);
-            DentistDto dateDentist = dentistService.getDentistById(dentistId);
-            newConsult.setPatientName(datePatient.getName());
-            newConsult.setPatientCpf(datePatient.getCpf());
-            newConsult.setDentistName(dateDentist.getName());
-            newConsult.setDentistCpf(dateDentist.getCpf());
-            if (AuthenticationModel.clientAuthentication != null) {
-                newConsult.setClinicId(AuthenticationModel.clientAuthentication.getClinic().getId());
-            } else if(AuthenticationModel.dentistAuthentication != null) {
-                newConsult.setClinicId(AuthenticationModel.dentistAuthentication.getClinic().getId());
-            }
-            if (consultService.addConsult(newConsult)) {
-                redirectAttributes.addFlashAttribute("messageSucess", "Consulta marcado com sucesso!");
-            } else {
-                redirectAttributes.addFlashAttribute("message", "Falhou ao marcar uma consulta!!");
-            }
+        if (AuthenticationModel.clientAuthentication != null || AuthenticationModel.dentistAuthentication != null) {
+            if (newConsult != null) {
+                PatientsDto datePatient = patientsService.getPatientById(patientId);
+                DentistDto dateDentist = dentistService.getDentistById(dentistId);
+                newConsult.setPatientName(datePatient.getName());
+                newConsult.setPatientCpf(datePatient.getCpf());
+                newConsult.setDentistName(dateDentist.getName());
+                newConsult.setDentistCpf(dateDentist.getCpf());
+                if (AuthenticationModel.clientAuthentication != null) {
+                    newConsult.setClinicId(AuthenticationModel.clientAuthentication.getClinic().getId());
+                } else if (AuthenticationModel.dentistAuthentication != null) {
+                    newConsult.setClinicId(AuthenticationModel.dentistAuthentication.getClinic().getId());
+                }
+                if (consultService.addConsult(newConsult)) {
+                    redirectAttributes.addFlashAttribute("messageSucess", "Consulta marcado com sucesso!");
+                } else {
+                    redirectAttributes.addFlashAttribute("message", "Falhou ao marcar uma consulta!!");
+                }
 
-        } else {
-            redirectAttributes.addFlashAttribute("message", "Dados inexistente!");
+            } else {
+                redirectAttributes.addFlashAttribute("message", "Dados inexistente!");
+            }
+            return "redirect:/user/home";
         }
-        return "redirect:/user/home";
+        return "redirect:/";
     }
 }

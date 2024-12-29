@@ -40,7 +40,9 @@
         border-collapse: collapse;
         margin-top: 20px;
     }
-
+    thead{
+        width: 100%;
+    }
     th {
         background-color: #4CAF50;
         color: white;
@@ -125,6 +127,62 @@
     .modal-content p {
         margin-bottom: 10px;
     }
+
+    /* Melhorias de Responsividade */
+    @media (max-width: 768px) {
+        .container {
+            padding: 15px;
+        }
+
+        h2 {
+            font-size: 18px;
+        }
+
+        table {
+            font-size: 14px;
+        }
+
+        .btn-details {
+            font-size: 12px;
+            padding: 6px 10px;
+        }
+
+        .modal-content {
+            width: 90%;
+            padding: 15px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        table {
+            font-size: 12px;
+        }
+
+        td, th {
+            padding: 8px;
+        }
+
+        .btn-details {
+            font-size: 10px;
+            padding: 5px 10px;
+        }
+
+        h2 {
+            font-size: 16px;
+        }
+
+        .modal-content {
+            width: 95%;
+        }
+    }
+
+    #searchInput {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
 </style>
 
 <div class="container">
@@ -156,7 +214,13 @@
                         th:data-phone="${dentist.phone}"
                         th:data-dateOfBirth="${dentist.dateOfBirth}"
                         th:data-address="${dentist.address}">Ver Detalhes</button>
+                <a th:href="@{/hisotory/dentist/{idDentist}(idDentist=${dentist.id})}">
+                    <button class=" btn-details"
+                            th:data-id="${dentist.id}">Ver historico
+                    </button>
+                </a>
             </td>
+
         </tr>
         </tbody>
     </table>
