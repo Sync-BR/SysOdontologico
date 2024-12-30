@@ -68,12 +68,13 @@ public class PatientsService {
             clientDate.setClinic(AuthenticationModel.clientAuthentication.getClinic());
             clinicDate = clientDate.getClinic();
 
-
         } else if (AuthenticationModel.dentistAuthentication != null) {
             patient.setClinic(AuthenticationModel.dentistAuthentication.getClinic());
             clientDate = AuthenticationModel.dentistAuthentication.getClinic().getClient();
             clientDate.setClinic(AuthenticationModel.dentistAuthentication.getClinic());
             clinicDate = clientDate.getClinic();
+        } else {
+            return false;
         }
         clinicDate.setClient(clientDate);
         patients.add(patient);
@@ -84,23 +85,5 @@ public class PatientsService {
         }
         return false;
 
-//
-//        List<PatientsDto> listPatients = new ArrayList<>();
-//        listPatients.add(patient);
-//        ClientDto clientDto = new ClientDto();
-//        if (AuthenticationModel.clientAuthentication != null) {
-//        } else if (AuthenticationModel.dentistAuthentication != null) {
-//            System.out.println("Dados cliente: " + AuthenticationModel.dentistAuthentication.getClinic().getClient());
-//        }
-//        ClinicDto clinicDto = clientDto.getClinic();
-//        clinicDto.setPatients(listPatients);
-//        clientDto.setClinic(clinicDto);
-//        ClientDto coppy = clientRepository.save(clientDto);
-//        if (coppy != null) {
-//            return true;
-//        } else {
-//
-//            return false;
-//        }
     }
 }
