@@ -4,81 +4,11 @@
     <meta charset="UTF-8">
     <title>Consultar Consultas</title>
     <link rel="stylesheet" href="./../../../src/style/message.css">
+    <link rel="stylesheet" href="./../../../src/style/reset.css">
+    <link rel="stylesheet" href="./../../../src/style/consult/consult.css">
 </head>
 <body>
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
 
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    }
-
-    main {
-        width: 100%;
-        max-width: 800px;
-        padding: 20px;
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    h1 {
-        font-size: 24px;
-        margin-bottom: 20px;
-        text-align: center;
-        color: #333;
-    }
-
-    form {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    label {
-        font-size: 14px;
-        color: #333;
-        margin-bottom: 5px;
-    }
-
-    input, textarea, select {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        font-size: 14px;
-    }
-
-    button {
-        width: 100%;
-        padding: 10px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        font-size: 16px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-    button:hover {
-        background-color: #45a049;
-    }
-
-    div {
-        display: flex;
-        flex-direction: column;
-    }
-</style>
 
 <div th:if="${message}" class="errorMessage" role="alert">
     <p th:text="${message}"></p>
@@ -119,7 +49,6 @@
         <button type="submit">Consultar Consultas</button>
     </form>
 
-    <!-- Exibição dos resultados da consulta -->
     <div th:if="${consults != null}">
         <h2>Consultas Encontradas</h2>
         <table>

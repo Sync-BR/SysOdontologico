@@ -3,110 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Histórico do Dentista</title>
+    <link rel="stylesheet" href="./../../../src/style/message.css">
+    <link rel="stylesheet" href="./../../../src/style/reset.css">
+    <link rel="stylesheet" href="./../../../src/style/history/dentist.css">
 </head>
 <body>
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
 
-    body {
-        font-family: 'Arial', sans-serif;
-        background-color: #f4f7fb;
-        color: #333;
-        padding: 20px;
-    }
-
-    .container {
-        width: 100%;
-        max-width: 1200px;
-        margin: 0 auto;
-        background-color: #fff;
-        padding: 30px;
-        border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    h1, h2 {
-        text-align: center;
-        margin-bottom: 20px;
-        color: #4CAF50;
-    }
-
-    .search-container {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 20px;
-    }
-
-    .search-container input[type="text"] {
-        width: 100%;
-        max-width: 400px;
-        padding: 10px;
-        font-size: 16px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-
-    th {
-        background-color: #4CAF50;
-        color: white;
-        padding: 12px;
-        text-align: left;
-        font-weight: normal;
-    }
-
-    td {
-        padding: 12px;
-        border-bottom: 1px solid #ddd;
-        text-align: left;
-    }
-
-    tr:hover {
-        background-color: #f9f9f9;
-    }
-
-    @media (max-width: 768px) {
-        .container {
-            padding: 15px;
-        }
-
-        h1, h2 {
-            font-size: 18px;
-        }
-
-        table {
-            font-size: 14px;
-        }
-    }
-
-    @media (max-width: 480px) {
-        table {
-            font-size: 12px;
-        }
-
-        td, th {
-            padding: 8px;
-        }
-
-        h1, h2 {
-            font-size: 16px;
-        }
-
-        .search-container {
-            flex-direction: column;
-            align-items: center;
-        }
-    }
-</style>
 
 <div class="container">
     <h1>Pesquisar Histórico do Dentista</h1>
@@ -148,26 +50,6 @@
     </table>
 </div>
 
-<script>
-    function filterTable() {
-        const searchInput = document.getElementById('search').value.toLowerCase();
-        const table = document.getElementById('patientsTable');
-        const rows = table.getElementsByTagName('tr');
-
-        for (let i = 1; i < rows.length; i++) {
-            const cells = rows[i].getElementsByTagName('td');
-            let match = false;
-
-            for (let j = 0; j < cells.length; j++) {
-                if (cells[j].textContent.toLowerCase().includes(searchInput)) {
-                    match = true;
-                    break;
-                }
-            }
-
-            rows[i].style.display = match ? '' : 'none';
-        }
-    }
-</script>
+<script src="./../../../src/js/history.js"></script>
 </body>
 </html>

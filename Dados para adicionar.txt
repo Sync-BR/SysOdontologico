@@ -1,16 +1,2 @@
-
-Dados do Exame
-Tipo de exame (ex.: limpeza, restauração, radiografia simples)
-Data de realização
-Dentista responsável
-Finalidade do exame (diagnóstico, controle de rotina, tratamento específico)
-
-Histórico Odontológico Simples
-Principais queixas ou sintomas (ex.: dor, sangramento gengival, sensibilidade)
-Tratamentos anteriores (ex.: obturação, extração, limpeza)
-Procedimentos pendentes ou programados
-
-
-Anexos e Observações
-Fotos do antes e depois (opcional, para melhorar o atendimento e o marketing)
-Observações gerais do dentista (simples, como "Retorno em 15 dias" ou "Avaliar cárie no molar superior esquerdo")
+Remover botão de visualizar imagem de um exame, caso não possuar exame anexado.
+Adicionar campo de patchImagem para pode ser nullo

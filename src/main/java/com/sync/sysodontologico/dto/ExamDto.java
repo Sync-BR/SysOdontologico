@@ -22,6 +22,7 @@ public class ExamDto {
     @Enumerated(EnumType.STRING)
     @Column(length = 500)
     private TypeExam examType;
+    @Column(nullable = true)
     private String mediaPatch;
     private ToothEnum tooth;
     @JsonIgnore

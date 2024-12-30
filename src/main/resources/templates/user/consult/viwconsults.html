@@ -3,85 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Consultas Marcadas</title>
+    <link rel="stylesheet" href="./../../../src/style/reset.css">
+    <link rel="stylesheet" href="./../../../src/style/consult/viwconsult.css">
 </head>
 <body>
-<style>
-    /* Corpo da página */
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f9f9f9;
-        color: #333;
-    }
 
-    /* Cabeçalho */
-    header {
-        background-color: #007BFF;
-        color: white;
-        padding: 20px;
-        text-align: center;
-    }
-
-    header h1 {
-        margin: 0;
-        font-size: 2rem;
-    }
-
-    /* Conteúdo principal */
-    main {
-        padding: 20px;
-    }
-
-    /* Seção */
-    section {
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-    }
-
-    /* Tabela */
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-
-    table th, table td {
-        padding: 12px 15px;
-        text-align: left;
-        border: 1px solid #ddd;
-    }
-
-    table th {
-        background-color: #007BFF;
-        color: white;
-    }
-
-    table tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
-
-    table tr:hover {
-        background-color: #eaf4ff;
-    }
-
-    /* Rodapé */
-    footer {
-        text-align: center;
-        padding: 10px;
-        background-color: #007BFF;
-        color: white;
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-    }
-
-    footer p {
-        margin: 0;
-    }
-</style>
 <header>
     <h1>Consultas Marcadas</h1>
 </header>
@@ -116,47 +42,7 @@
     <p>© 2024 - Sistema SysOdontologico</p>
 </footer>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const tableBody = document.getElementById('consultsTable');
-        const rows = Array.from(tableBody.querySelectorAll('tr'));
-
-        // Obtém a data atual no formato "yyyy-MM-dd"
-        const today = new Date().toISOString().split('T')[0];
-
-        // Função para converter "dd/MM/yyyy HH:mm" para Date
-        function parseDate(dateStr) {
-            const [day, month, year, time] = dateStr.split(/\/| /);
-            const [hours, minutes] = time.split(':');
-            return new Date(year, month - 1, day, hours, minutes);
-        }
-
-        // Filtra as consultas que são hoje (data igual a "today")
-        const filteredRows = rows.filter(row => {
-            const consultDateStr = row.cells[5].innerText.trim(); // Pegando a coluna da data
-            const consultDay = consultDateStr.split(' ')[0]; // Data sem hora (ex: "29/12/2024")
-            return formatDateToISO(consultDay) === today; // Compara com a data de hoje
-        });
-
-        // Ordena as consultas pela data (e hora)
-        const sortedRows = filteredRows.sort((a, b) => {
-            const dateA = parseDate(a.cells[5].innerText.trim()); // Conversão da data para Date
-            const dateB = parseDate(b.cells[5].innerText.trim());
-            return dateA - dateB; // Ordenação crescente
-        });
-
-        // Limpa a tabela original
-        tableBody.innerHTML = '';
-
-        // Adiciona as linhas filtradas e ordenadas
-        sortedRows.forEach(row => tableBody.appendChild(row));
-
-        // Converte "dd/MM/yyyy" para "yyyy-MM-dd"
-        function formatDateToISO(dateStr) {
-            const [day, month, year] = dateStr.split('/');
-            return `${year}-${month}-${day}`; // Formato ISO "yyyy-MM-dd"
-        }
-    });
+<script src="../../../src/js/viwconsult.js">
 </script>
 </body>
 </html>

@@ -40,8 +40,21 @@ public class ExamController {
             } else {
                 redirectAttributes.addFlashAttribute("message", "Erro ao fazer upload do arquivo.");
             }
-        } else {
-            redirectAttributes.addFlashAttribute("message", "Dados inválidos ou arquivo não enviado.");
+        } else if (newExam != null) {
+            newExam.setMediaPatch(null);
+            if (AuthenticationModel.clientAuthentication != null) {
+                newExam.setClinic(AuthenticationModel.clientAuthentication.getClinic());
+            } else if (AuthenticationModel.dentistAuthentication != null) {
+                newExam.setClinic(AuthenticationModel.dentistAuthentication.getClinic());
+            } else {
+                return "redirect:/";
+            }
+            if (examService.register(newExam)) {
+                redirectAttributes.addFlashAttribute("messageSucess", "Exame adicionado com sucesso!");
+            } else {
+                redirectAttributes.addFlashAttribute("message", "Erro ao registrar o exame.");
+            }
+
         }
 
 
