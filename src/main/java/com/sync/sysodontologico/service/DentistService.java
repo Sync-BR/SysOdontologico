@@ -1,7 +1,9 @@
 package com.sync.sysodontologico.service;
 
+import com.sync.sysodontologico.dto.ClinicDto;
 import com.sync.sysodontologico.dto.DentistDto;
 import com.sync.sysodontologico.model.AuthenticationModel;
+import com.sync.sysodontologico.repository.ClinicRepository;
 import com.sync.sysodontologico.repository.DentistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,8 @@ import java.util.List;
 public class DentistService {
     @Autowired
     private DentistRepository dentistRepository;
+    @Autowired
+    private ClinicRepository clinicRepository;
 
     private boolean checkExistence(DentistDto dentist) {
         DentistDto checkCpf = dentistRepository.findByClinicIdAndCpf((long) AuthenticationModel.clientAuthentication.getClinic().getId(), dentist.getCpf());
@@ -37,16 +41,23 @@ public class DentistService {
         } else if (AuthenticationModel.dentistAuthentication != null) {
             List<DentistDto> dentist = new ArrayList<>();
             dentist.add(AuthenticationModel.dentistAuthentication);
-            return dentist;}
+            return dentist;
+        }
         return null;
     }
 
     @Transactional
     public DentistDto register(DentistDto dentistDto) {
-        dentistDto.setClinic(AuthenticationModel.clientAuthentication.getClinic());
+        ClinicDto clinic = AuthenticationModel.clientAuthentication.getClinic();
+        if (!clinicRepository.existsById((long) clinic.getId())) {
+            clinic = clinicRepository.save(clinic);
+            dentistDto.setClinic(clinic);
+        }
+
         if (!checkExistence(dentistDto)) {
             return dentistRepository.save(dentistDto);
         }
         return null;
+
     }
 }

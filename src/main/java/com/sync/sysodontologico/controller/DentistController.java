@@ -15,7 +15,9 @@ public class DentistController {
 
     @PostMapping("/U2FsdGVkX19mav0FVJsLPN1KpfZuMpGKl0u3mINTdlzr9kppF4BXEZr9")
     public String registerDentist(DentistDto newDentist, RedirectAttributes redirectAttributes) {
+        System.out.println(newDentist);
         if (AuthenticationModel.clientAuthentication != null) {
+            newDentist.setClinic(AuthenticationModel.clientAuthentication.getClinic());
             DentistDto verificationDentist = dentistService.register(newDentist);
             if (verificationDentist != null) {
                 redirectAttributes.addFlashAttribute("messageSucess", "Dentista cadastrado com sucesso");

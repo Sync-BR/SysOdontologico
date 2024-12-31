@@ -28,7 +28,6 @@ public class ClientDto {
     @JoinColumn(name = "clinic_id", referencedColumnName = "id")
     private ClinicDto clinic;
 
-    // Criar uma lista de pacientes e exames em clinics. Para os pacientes em cada clinica!
 
     public ClientDto() {
 
