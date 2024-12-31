@@ -12,7 +12,6 @@ import java.nio.file.Paths;
 @Service
 public class UploadService {
     public static String uploadDir = "E:/Java/Projetos SpringBoot/SysOdontologico/src/main/resources/static/src/img/exam";
-
     public String uploadExam(MultipartFile file) {
         String archiveName = null;
         try {
@@ -21,6 +20,7 @@ public class UploadService {
             Files.createDirectories(filePath.getParent());
             Files.write(filePath, file.getBytes());
             archiveName = "/src/img/exam/" + fileName;
+
         } catch (IOException e) {
             System.out.println("Erro ao salvar exame: " + e.getMessage());
         }

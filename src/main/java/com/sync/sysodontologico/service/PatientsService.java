@@ -80,7 +80,14 @@ public class PatientsService {
         patients.add(patient);
         clinicDate.setPatients(patients);
         ClientDto isSuccess = clientRepository.save(clientDate);
+
         if (isSuccess != null) {
+            if(AuthenticationModel.clientAuthentication != null){
+                AuthenticationModel.clientAuthentication.setClinic(isSuccess.getClinic());
+            } else if(AuthenticationModel.dentistAuthentication != null){
+                AuthenticationModel.dentistAuthentication.setClinic(isSuccess.getClinic());
+
+            }
             return true;
         }
         return false;

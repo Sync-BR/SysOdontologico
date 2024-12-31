@@ -20,7 +20,7 @@
 </div>
 
 <main>
-    <h1>Consultar Consultas</h1>
+    <h1>Registrar Consultas</h1>
 
     <form action="/dentist/consult/add" method="post">
 
@@ -28,16 +28,15 @@
             <label for="consultDate">Data e Hora da Consulta:</label>
             <input type="datetime-local" id="consultDate" name="consultDate" required>
         </div>
-        <div>
+        <div  style="display: none" >
             <label for="patient">Paciente:</label>
             <select id="patient" name="patientsDto.id" required>
-                <option value="" disabled selected>Selecione o paciente</option>
-                <option th:each="patient : ${patients}"
+                <option selected th:each="patient : ${patients}"
                         th:value="${patient.id}"
                         th:text="${patient.name}"></option>
             </select>
         </div>
-        <div>
+        <div th:if="${clientAuthentication != null}">
             <label for="dentist">Dentista:</label>
             <select id="dentist" name="dentist" required>
                 <option value="" disabled selected>Selecione o dentista</option>
@@ -45,6 +44,14 @@
                         th:value="${dentist.id}" th:text="${dentist.name}"></option>
             </select>
         </div>
+
+        <div th:if="${dentistAuthentication != null}"  style="display: none">
+            <select  name="dentist" required>
+            <option selected th:each="dentist : ${dentists}"
+                    th:value="${dentist.id}" th:text="${dentist.name}"></option>
+        </select>
+        </div>
+
 
         <button type="submit">Consultar Consultas</button>
     </form>

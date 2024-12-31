@@ -29,11 +29,9 @@
             <table>
                 <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>Data</th>
                     <th>Descrição</th>
                     <th>Tipo de Exame</th>
-                    <th>Data</th>
-                    <th>Clínica</th>
                     <th>Dente</th>
                     <th>Dentista</th>
                     <th>Anexo</th>
@@ -41,17 +39,16 @@
                 </thead>
                 <tbody>
                 <tr th:each="exam : ${patients}">
-                    <td th:text="${exam.id}"></td>
+                    <td th:text="${#temporals.format(exam.date, 'dd/MM/yyyy')}"></td>
                     <td th:text="${exam.description}"></td>
                     <td th:text="${exam.examType.getDescription()}"></td>
-                    <td th:text="${#temporals.format(exam.date, 'dd/MM/yyyy')}"></td>
-                    <td th:text="${exam.clinic.getId()}"></td>
                     <td th:text="${exam.getTooth().getDescription()}"></td>
                     <td th:text="${exam.getDentist().getName()}"></td>
                     <td>
                         <button type="button" class="button-view-image"
                                 th:if="${exam.getMediaPatch() != null}"
                                 th:data-image="${exam.getMediaPatch()}"
+
                                 th:data-description="${exam.description}"
                                 onclick="openModal(this.dataset.image, this.dataset.description)">
                             Visualizar imagem

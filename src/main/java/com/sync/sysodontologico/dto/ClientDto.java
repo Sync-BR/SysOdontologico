@@ -31,6 +31,7 @@ public class ClientDto {
     // Criar uma lista de pacientes e exames em clinics. Para os pacientes em cada clinica!
 
     public ClientDto() {
+
     }
     @Override
     public String toString() {
