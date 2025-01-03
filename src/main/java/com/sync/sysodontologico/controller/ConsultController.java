@@ -1,5 +1,6 @@
 package com.sync.sysodontologico.controller;
 
+import com.sync.sysodontologico.dto.ClientDto;
 import com.sync.sysodontologico.dto.ConsultDto;
 import com.sync.sysodontologico.dto.DentistDto;
 import com.sync.sysodontologico.dto.PatientsDto;
@@ -7,6 +8,7 @@ import com.sync.sysodontologico.model.AuthenticationModel;
 import com.sync.sysodontologico.service.ConsultService;
 import com.sync.sysodontologico.service.DentistService;
 import com.sync.sysodontologico.service.PatientsService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,8 +26,11 @@ public class ConsultController {
 
 
     @PostMapping("/dentist/consult/add")
-    public String registerConsult(ConsultDto newConsult, @RequestParam("patientsDto.id") Long patientId, @RequestParam("dentist") Long dentistId, RedirectAttributes redirectAttributes) {
-        if (AuthenticationModel.clientAuthentication != null || AuthenticationModel.dentistAuthentication != null) {
+    public String registerConsult(ConsultDto newConsult, @RequestParam("patientsDto.id") Long patientId, @RequestParam("dentist") Long dentistId, RedirectAttributes redirectAttributes, HttpSession session)
+    {
+        ClientDto clientAuthentication = (ClientDto) session.getAttribute("client");
+        DentistDto dentistAuthentication = (DentistDto) session.getAttribute("dentist");
+        if (clientAuthentication != null || dentistAuthentication != null) {
             if (newConsult != null) {
                 PatientsDto datePatient = patientsService.getPatientById(patientId);
                 DentistDto dateDentist = dentistService.getDentistById(dentistId);
@@ -33,10 +38,10 @@ public class ConsultController {
                 newConsult.setPatientCpf(datePatient.getCpf());
                 newConsult.setDentistName(dateDentist.getName());
                 newConsult.setDentistCpf(dateDentist.getCpf());
-                if (AuthenticationModel.clientAuthentication != null) {
-                    newConsult.setClinicId(AuthenticationModel.clientAuthentication.getClinic().getId());
-                } else if (AuthenticationModel.dentistAuthentication != null) {
-                    newConsult.setClinicId(AuthenticationModel.dentistAuthentication.getClinic().getId());
+                if (clientAuthentication != null) {
+                    newConsult.setClinicId(clientAuthentication.getClinic().getId());
+                } else if (dentistAuthentication != null) {
+                    newConsult.setClinicId(dentistAuthentication.getClinic().getId());
                 }
                 if (consultService.addConsult(newConsult)) {
                     redirectAttributes.addFlashAttribute("messageSucess", "Consulta marcado com sucesso!");

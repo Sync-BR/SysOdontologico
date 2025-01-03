@@ -1,8 +1,11 @@
 package com.sync.sysodontologico.service;
 
+import com.sync.sysodontologico.dto.ClientDto;
 import com.sync.sysodontologico.dto.ConsultDto;
+import com.sync.sysodontologico.dto.DentistDto;
 import com.sync.sysodontologico.model.AuthenticationModel;
 import com.sync.sysodontologico.repository.ConsultRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,12 +15,16 @@ import java.util.List;
 public class ConsultService {
     @Autowired
     private ConsultRepository consultRepository;
+    @Autowired
+    private HttpSession session;
 
     public List<ConsultDto> getAllConsults() {
-        if (AuthenticationModel.clientAuthentication != null) {
-            return consultRepository.getConsultByClinicId((long) AuthenticationModel.clientAuthentication.getClinic().getId());
-        } else if (AuthenticationModel.dentistAuthentication != null) {
-            return consultRepository.getConsultByClinicId((long) AuthenticationModel.dentistAuthentication.getClinic().getId());
+        ClientDto clientAuthentication = (ClientDto) session.getAttribute("client");
+        DentistDto dentistAuthentication = (DentistDto) session.getAttribute("dentist");
+        if (clientAuthentication != null) {
+            return consultRepository.getConsultByClinicId((long) clientAuthentication.getClinic().getId());
+        } else if (dentistAuthentication != null) {
+            return consultRepository.getConsultByClinicId((long) dentistAuthentication.getClinic().getId());
         }
         return null ;
     }

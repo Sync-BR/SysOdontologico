@@ -1,10 +1,13 @@
 package com.sync.sysodontologico.service;
 
+import com.sync.sysodontologico.dto.ClientDto;
+import com.sync.sysodontologico.dto.DentistDto;
 import com.sync.sysodontologico.dto.ExamDto;
 import com.sync.sysodontologico.dto.HistoryDto;
 import com.sync.sysodontologico.model.AuthenticationModel;
 import com.sync.sysodontologico.repository.ExamRepository;
 import com.sync.sysodontologico.repository.HistoryRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,12 +19,15 @@ public class ExamService extends HistoryService {
     private ExamRepository examRepository;
     @Autowired
     private HistoryRepository historyRepository;
-
+    @Autowired
+    private HttpSession session;
     public List<ExamDto> getAllExamsById(long id) {
-        if (AuthenticationModel.clientAuthentication != null)
-            return examRepository.findExamsByPatientAndClinic(id, (long) AuthenticationModel.clientAuthentication.getClinic().getId());
-        if (AuthenticationModel.dentistAuthentication != null)
-            return examRepository.findExamsByPatientAndClinic(id, (long) AuthenticationModel.dentistAuthentication.getClinic().getId());
+        ClientDto clientAuthentication = (ClientDto) session.getAttribute("client");
+        DentistDto dentistAuthentication = (DentistDto) session.getAttribute("dentist");
+        if (clientAuthentication != null)
+            return examRepository.findExamsByPatientAndClinic(id, (long) clientAuthentication.getClinic().getId());
+        if (dentistAuthentication != null)
+            return examRepository.findExamsByPatientAndClinic(id, (long) dentistAuthentication.getClinic().getId());
         return null;
     }
 

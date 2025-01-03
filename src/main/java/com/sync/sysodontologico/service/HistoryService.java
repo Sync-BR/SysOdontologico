@@ -27,15 +27,12 @@ public class HistoryService {
 
     public List<PatientsDto> getHistoryByDentis(int dentistId) {
         DentistDto dentistDto = dentistRepository.findById((long) dentistId).get();
-        System.out.println("Log do dentista: " + dentistDto);
         List<HistoryDto> histories = historyRepository.findByDoctorId(dentistDto.getId());
-        System.out.println("Log do historico: " + histories);
         List<PatientsDto> patientData = new ArrayList<>();
         for (HistoryDto historyDto : histories) {
             List<PatientsDto> patients = patientsRepository.findByClinicIdAndPatientID((long) historyDto.getIdClinic(), historyDto.getIdPatient());
             patientData.addAll(patients);
         }
-        System.out.println("Dados do paciente: " + patientData);
         return patientData;
     }
 

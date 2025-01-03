@@ -1,13 +1,20 @@
 package com.sync.sysodontologico.controller;
 
+
+import com.sync.sysodontologico.dto.ClientDto;
+import com.sync.sysodontologico.dto.DentistDto;
 import com.sync.sysodontologico.model.AuthenticationModel;
 import com.sync.sysodontologico.service.*;
+import com.sync.sysodontologico.token.repository.TokenRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import static com.sync.sysodontologico.model.AuthenticationModel.clientAuthentication;
 import static com.sync.sysodontologico.model.AuthenticationModel.dentistAuthentication;
@@ -29,12 +36,8 @@ public class HomeController {
 
     //Controller e paginas inicias
     @GetMapping("/")
-    public String home() {
-        if(clientAuthentication != null){
-            clientAuthentication = null;
-        } else if(AuthenticationModel.dentistAuthentication != null){
-            AuthenticationModel.dentistAuthentication = null;
-        }
+    public String home(HttpSession session) {
+        session.invalidate();
         return "index";
     }
 
@@ -43,11 +46,14 @@ public class HomeController {
     @GetMapping("/user/register")
     public String userRegister() {
         return "user/register";
+
     }
 
     // Controller de pagina de usuários
     @GetMapping("/user/home")
-    public String userHome(Model model) {
+    public String userHome(Model model, HttpSession session) {
+        ClientDto clientAuthentication = (ClientDto) session.getAttribute("client");
+        DentistDto dentistAuthentication = (DentistDto) session.getAttribute("dentist");
         if (clientAuthentication != null) {
             if (clientAuthentication.getClinic() != null) {
                 model.addAttribute("clientAuthentication", clientAuthentication);
@@ -55,8 +61,8 @@ public class HomeController {
             } else {
                 return "redirect:/clinic/register";
             }
-        } else if (AuthenticationModel.dentistAuthentication != null) {
-            if (AuthenticationModel.dentistAuthentication.getClinic() != null) {
+        } else if (dentistAuthentication != null) {
+            if (dentistAuthentication.getClinic() != null) {
                 return "user/index";
             }
         }
@@ -65,9 +71,11 @@ public class HomeController {
 
 
     @GetMapping("/clinic/register")
-    public String clinicRegister() {
-        if (clientAuthentication != null || AuthenticationModel.dentistAuthentication != null) {
-            if (clientAuthentication.getClinic() != null || AuthenticationModel.dentistAuthentication != null) {
+    public String clinicRegister(HttpSession session) {
+        ClientDto clientAuthentication = (ClientDto) session.getAttribute("client");
+        DentistDto dentistAuthentication = (DentistDto) session.getAttribute("dentist");
+        if (clientAuthentication != null || dentistAuthentication != null) {
+            if (clientAuthentication.getClinic() != null || dentistAuthentication != null) {
                 return "redirect:/user/home";
             }
         } else {
@@ -78,16 +86,20 @@ public class HomeController {
 
     //Paginação pacientes
     @GetMapping("/registrar/pacientes")
-    public String registerPatient() {
-        if (clientAuthentication != null || AuthenticationModel.dentistAuthentication != null) {
+    public String registerPatient(HttpSession session) {
+        ClientDto clientAuthentication = (ClientDto) session.getAttribute("client");
+        DentistDto dentistAuthentication = (DentistDto) session.getAttribute("dentist");
+        if (clientAuthentication != null || dentistAuthentication != null) {
             return "user/clinic/patients";
         }
         return "redirect:/";
     }
 
     @GetMapping("/visualizar/pacientes")
-    public String viewerPatient(Model model) {
-        if (clientAuthentication != null || AuthenticationModel.dentistAuthentication != null) {
+    public String viewerPatient(Model model, HttpSession session) {
+        ClientDto clientAuthentication = (ClientDto) session.getAttribute("client");
+        DentistDto dentistAuthentication = (DentistDto) session.getAttribute("dentist");
+        if (clientAuthentication != null || dentistAuthentication != null) {
             model.addAttribute("pacientes", patientsService.getAllPatients());
             return "user/patients/viwpatients";
         }
@@ -97,15 +109,18 @@ public class HomeController {
 
     // Pagina para controller de dentista
     @GetMapping("/dentista/registrar")
-    public String registerDentist() {
+    public String registerDentist(HttpSession session) {
+        ClientDto clientAuthentication = (ClientDto) session.getAttribute("client");
         if (clientAuthentication != null) {
             return "user/dentist/register";
         }
         return "redirect:/";
 
     }
+
     @GetMapping("/visualizar/dentista")
-    public String viwerDentista(Model model) {
+    public String viwerDentista(Model model, HttpSession session) {
+        ClientDto clientAuthentication = (ClientDto) session.getAttribute("client");
         if (clientAuthentication != null) {
             model.addAttribute("dentist", dentistService.getAllDentist());
             return "user/dentist/viwdentist";
@@ -113,10 +128,11 @@ public class HomeController {
         return "redirect:/";
 
     }
+
     @GetMapping("/hisotory/dentist/{idDentist}")
-    public String viwerHistoryDentista(@PathVariable int idDentist, Model model) {
+    public String viwerHistoryDentista(@PathVariable int idDentist, Model model, HttpSession session) {
+        ClientDto clientAuthentication = (ClientDto) session.getAttribute("client");
         if (clientAuthentication != null) {
-            System.out.println(historyService.getHistoryByDentis(idDentist));
             model.addAttribute("dentist", historyService.getHistoryByDentis(idDentist));
             return "user/history/dentist";
         }
@@ -125,13 +141,12 @@ public class HomeController {
 
     //Controle de exames
     @GetMapping("/patient/exam/add/{idPatient}")
-    public String addPatientExam(@PathVariable int idPatient, Model model) {
-        if (clientAuthentication != null || AuthenticationModel.dentistAuthentication != null) {
-            System.out.println("Log client " + clientAuthentication);
-            System.out.println("Log dentist " + AuthenticationModel.dentistAuthentication);
+    public String addPatientExam(@PathVariable int idPatient, Model model, HttpSession session) {
+        DentistDto dentistAuthentication = (DentistDto) session.getAttribute("dentist");
+        ClientDto clientAuthentication = (ClientDto) session.getAttribute("client");
+        if (clientAuthentication != null || dentistAuthentication != null) {
             model.addAttribute("clientAuthentication", clientAuthentication);
-            model.addAttribute("dentistAuthentication", AuthenticationModel.dentistAuthentication);
-
+            model.addAttribute("dentistAuthentication", dentistAuthentication);
             model.addAttribute("patients", patientsService.getPatientById(idPatient));
             model.addAttribute("dentists", dentistService.getAllDentist());
             return "user/exam/addexam";
@@ -140,8 +155,10 @@ public class HomeController {
     }
 
     @GetMapping("/patient/viwer/exam/{idPatient}")
-    public String getExamPatient(@PathVariable int idPatient, Model model) {
-        if (clientAuthentication != null || AuthenticationModel.dentistAuthentication != null) {
+    public String getExamPatient(@PathVariable int idPatient, Model model, HttpSession session) {
+        ClientDto clientAuthentication = (ClientDto) session.getAttribute("client");
+        DentistDto dentistAuthentication = (DentistDto) session.getAttribute("dentist");
+        if (clientAuthentication != null || dentistAuthentication != null) {
             model.addAttribute("patients", examService.getAllExamsById(idPatient));
             return "user/exam/viwexam";
         }
@@ -150,8 +167,10 @@ public class HomeController {
 
     //Controle de consultas
     @GetMapping("/patient/consult/add/{idPatient}")
-    public String addConsult(Model model, @PathVariable int idPatient) {
-        if (clientAuthentication != null || AuthenticationModel.dentistAuthentication != null) {
+    public String addConsult(Model model, @PathVariable int idPatient, HttpSession session) {
+        ClientDto clientAuthentication = (ClientDto) session.getAttribute("client");
+        DentistDto dentistAuthentication = (DentistDto) session.getAttribute("dentist");
+        if (clientAuthentication != null || dentistAuthentication != null) {
             model.addAttribute("patients", patientsService.getPatientById(idPatient));
             model.addAttribute("dentists", dentistService.getAllDentist());
             model.addAttribute("clientAuthentication", clientAuthentication);
@@ -162,8 +181,10 @@ public class HomeController {
     }
 
     @GetMapping("/patient/consult/viw")
-    public String getAllConsult(Model model) {
-        if (clientAuthentication != null || AuthenticationModel.dentistAuthentication != null) {
+    public String getAllConsult(Model model, HttpSession session) {
+        ClientDto clientAuthentication = (ClientDto) session.getAttribute("client");
+        DentistDto dentistAuthentication = (DentistDto) session.getAttribute("dentist");
+        if (clientAuthentication != null || dentistAuthentication != null) {
             model.addAttribute("consults", consultService.getAllConsults());
             return "user/consult/viwconsults";
         }

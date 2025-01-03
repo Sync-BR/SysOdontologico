@@ -16,30 +16,8 @@ public class UserService {
     @Autowired
     private ClientRepository clientRepository;
 
-    public boolean getClinicById(Long id) {
-        Optional<ClientDto> client = clientRepository.findByClinicId(id);
-
-        if(client.isPresent()) {
-            ClientDto clientDto = client.get();
-            if(clientDto.getClinic().getId() == 0) {
-                return false;
-            } else {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public Optional<ClientDto> getClientByUsername(String username) {
-        UserDto userVerification = userRepository.findByUsername(username);
-        if (userVerification != null) {
-            return clientRepository.findByUserId(userVerification.getId());
-        }
-        return null;
-    }
 
     public UserDto login(UserDto user) {
-
 
         return  userRepository.findByUsername(user.getUsername());
     }

@@ -6,6 +6,7 @@ import com.sync.sysodontologico.dto.UserDto;
 import com.sync.sysodontologico.model.AuthenticationModel;
 import com.sync.sysodontologico.service.UserService;
 import com.sync.sysodontologico.enums.SubscriptionsType;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,23 +21,19 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/logout")
-    public String logout() {
-        if (AuthenticationModel.clientAuthentication != null) {
-            AuthenticationModel.clientAuthentication = null;
-        } else if(AuthenticationModel.dentistAuthentication != null) {
-            AuthenticationModel.dentistAuthentication = null;
-        }
+    public String logout(HttpSession session) {
+        session.invalidate();
         return "redirect:/";
     }
 
     @PostMapping("/U2FsdGVkX1+SVZbYQbDGn8Lli+o6A2wE8SiLvyMX29w=")
-    public String login(UserDto user, RedirectAttributes redirectAttributes) {
+    public String login(UserDto user, RedirectAttributes redirectAttributes, HttpSession session) {
         UserDto userAuthentication = userService.login(user);
         if (userAuthentication != null) {
             if (userAuthentication.getClient() != null) {
-                AuthenticationModel.clientAuthentication = userAuthentication.getClient();
+                session.setAttribute("client", userAuthentication.getClient());
             } else if (userAuthentication.getDentist() != null) {
-                AuthenticationModel.dentistAuthentication = userAuthentication.getDentist();
+                session.setAttribute("dentist", userAuthentication.getDentist());
             }
             return "redirect:/user/home";
         }

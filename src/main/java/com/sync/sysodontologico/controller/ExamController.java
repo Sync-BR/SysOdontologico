@@ -1,9 +1,12 @@
 package com.sync.sysodontologico.controller;
 
+import com.sync.sysodontologico.dto.ClientDto;
+import com.sync.sysodontologico.dto.DentistDto;
 import com.sync.sysodontologico.dto.ExamDto;
 import com.sync.sysodontologico.model.AuthenticationModel;
 import com.sync.sysodontologico.service.ExamService;
 import com.sync.sysodontologico.service.UploadService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,15 +23,17 @@ public class ExamController {
     private UploadService serviceUpload;
 
     @PostMapping("/dentist/exam/add")
-    public String register(ExamDto newExam, MultipartFile mediaFile, RedirectAttributes redirectAttributes) {
+    public String register(ExamDto newExam, MultipartFile mediaFile, RedirectAttributes redirectAttributes, HttpSession session) {
+        ClientDto clientAuthentication = (ClientDto) session.getAttribute("client");
+        DentistDto dentistAuthentication = (DentistDto) session.getAttribute("dentist");
         if (newExam != null && mediaFile != null && !mediaFile.isEmpty()) {
             String uploadedFilePath = serviceUpload.uploadExam(mediaFile);
             if (uploadedFilePath != null) {
                 newExam.setMediaPatch(uploadedFilePath);
-                if (AuthenticationModel.clientAuthentication != null) {
-                    newExam.setClinic(AuthenticationModel.clientAuthentication.getClinic());
-                } else if (AuthenticationModel.dentistAuthentication != null) {
-                    newExam.setClinic(AuthenticationModel.dentistAuthentication.getClinic());
+                if (clientAuthentication != null) {
+                    newExam.setClinic(clientAuthentication.getClinic());
+                } else if (dentistAuthentication != null) {
+                    newExam.setClinic(dentistAuthentication.getClinic());
                 } else {
                     return "redirect:/";
                 }
@@ -42,10 +47,10 @@ public class ExamController {
             }
         } else if (newExam != null) {
             newExam.setMediaPatch(null);
-            if (AuthenticationModel.clientAuthentication != null) {
-                newExam.setClinic(AuthenticationModel.clientAuthentication.getClinic());
-            } else if (AuthenticationModel.dentistAuthentication != null) {
-                newExam.setClinic(AuthenticationModel.dentistAuthentication.getClinic());
+            if (clientAuthentication != null) {
+                newExam.setClinic(clientAuthentication.getClinic());
+            } else if (dentistAuthentication != null) {
+                newExam.setClinic(dentistAuthentication.getClinic());
             } else {
                 return "redirect:/";
             }

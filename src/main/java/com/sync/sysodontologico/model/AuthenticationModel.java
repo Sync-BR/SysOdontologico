@@ -8,8 +8,11 @@ import lombok.Setter;
 @Setter
 @Getter
 public class AuthenticationModel {
-    public static ClientDto clientAuthentication;
+    public static  ClientDto clientAuthentication;
     public static DentistDto dentistAuthentication;
+
+    private ClientDto client;
+
 
     public AuthenticationModel() {
     }

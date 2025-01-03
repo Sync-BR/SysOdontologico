@@ -1,10 +1,12 @@
 package com.sync.sysodontologico.service;
 
+import com.sync.sysodontologico.dto.ClientDto;
 import com.sync.sysodontologico.dto.ClinicDto;
 import com.sync.sysodontologico.dto.DentistDto;
 import com.sync.sysodontologico.model.AuthenticationModel;
 import com.sync.sysodontologico.repository.ClinicRepository;
 import com.sync.sysodontologico.repository.DentistRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,13 +20,16 @@ public class DentistService {
     private DentistRepository dentistRepository;
     @Autowired
     private ClinicRepository clinicRepository;
+    @Autowired
+    private HttpSession session;
 
     private boolean checkExistence(DentistDto dentist) {
-        DentistDto checkCpf = dentistRepository.findByClinicIdAndCpf((long) AuthenticationModel.clientAuthentication.getClinic().getId(), dentist.getCpf());
+        ClientDto clientAuthentication = (ClientDto) session.getAttribute("client");
+        DentistDto checkCpf = dentistRepository.findByClinicIdAndCpf((long) clientAuthentication.getClinic().getId(), dentist.getCpf());
         if (checkCpf != null) {
             return true;
         }
-        DentistDto checkEmail = dentistRepository.findByClinicIdAndEmail((long) AuthenticationModel.clientAuthentication.getClinic().getId(), dentist.getEmail());
+        DentistDto checkEmail = dentistRepository.findByClinicIdAndEmail((long) clientAuthentication.getClinic().getId(), dentist.getEmail());
         if (checkEmail != null) {
             return true;
         }
@@ -36,11 +41,13 @@ public class DentistService {
     }
 
     public List<DentistDto> getAllDentist() {
-        if (AuthenticationModel.clientAuthentication != null) {
-            return dentistRepository.getDentistById(AuthenticationModel.clientAuthentication.getClinic().getId());
-        } else if (AuthenticationModel.dentistAuthentication != null) {
+        ClientDto clientAuthentication = (ClientDto) session.getAttribute("client");
+        DentistDto dentistAuthentication = (DentistDto) session.getAttribute("dentist");
+        if (clientAuthentication != null) {
+            return dentistRepository.getDentistById(clientAuthentication.getClinic().getId());
+        } else if (dentistAuthentication != null) {
             List<DentistDto> dentist = new ArrayList<>();
-            dentist.add(AuthenticationModel.dentistAuthentication);
+            dentist.add(dentistAuthentication);
             return dentist;
         }
         return null;
@@ -48,7 +55,8 @@ public class DentistService {
 
     @Transactional
     public DentistDto register(DentistDto dentistDto) {
-        ClinicDto clinic = AuthenticationModel.clientAuthentication.getClinic();
+        ClientDto clientAuthentication = (ClientDto) session.getAttribute("client");
+        ClinicDto clinic = clientAuthentication.getClinic();
         if (!clinicRepository.existsById((long) clinic.getId())) {
             clinic = clinicRepository.save(clinic);
             dentistDto.setClinic(clinic);

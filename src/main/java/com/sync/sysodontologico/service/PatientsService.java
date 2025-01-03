@@ -7,6 +7,7 @@ import com.sync.sysodontologico.dto.ClinicDto;
 import com.sync.sysodontologico.dto.PatientsDto;
 import com.sync.sysodontologico.repository.ClientRepository;
 import com.sync.sysodontologico.repository.PatientsRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,16 +20,19 @@ public class PatientsService {
     private PatientsRepository patientsRepository;
     @Autowired
     private ClientRepository clientRepository;
-
+    @Autowired
+    private HttpSession session;
     public PatientsDto getPatientById(long id) {
         return patientsRepository.findById(id);
     }
 
     public List<PatientsDto> getAllPatients() {
-        if (AuthenticationModel.clientAuthentication != null) {
-            return patientsRepository.getPatientsById(AuthenticationModel.clientAuthentication.getClinic().getId());
-        } else if (AuthenticationModel.dentistAuthentication != null) {
-            return patientsRepository.getPatientsById(AuthenticationModel.dentistAuthentication.getClinic().getId());
+        ClientDto clientAuthentication = (ClientDto) session.getAttribute("client");
+        DentistDto dentistAuthentication = (DentistDto) session.getAttribute("dentist");
+        if (clientAuthentication != null) {
+            return patientsRepository.getPatientsById(clientAuthentication.getClinic().getId());
+        } else if (dentistAuthentication != null) {
+            return patientsRepository.getPatientsById(dentistAuthentication.getClinic().getId());
 
         }
         return null;
@@ -39,15 +43,17 @@ public class PatientsService {
     }
 
     public boolean patientExists(PatientsDto patient) {
+        ClientDto clientAuthentication = (ClientDto) session.getAttribute("client");
+        DentistDto dentistAuthentication = (DentistDto) session.getAttribute("dentist");
         //Fazer uma condição para verificar o id do paciente para saber se existte na quela clinica!!!
         PatientsDto existsCpf = new PatientsDto();
         PatientsDto existsEmail = new PatientsDto();
-        if (AuthenticationModel.clientAuthentication != null) {
-            existsCpf = patientsRepository.findByClinicIdAndCpf((long) AuthenticationModel.clientAuthentication.getClinic().getId(), patient.getCpf());
-            existsEmail = patientsRepository.findByClinicIdAndEmail((long) AuthenticationModel.clientAuthentication.getClinic().getId(), patient.getEmail());
-        } else if (AuthenticationModel.dentistAuthentication != null) {
-            existsCpf = patientsRepository.findByClinicIdAndCpf((long) AuthenticationModel.dentistAuthentication.getClinic().getId(), patient.getCpf());
-            existsEmail = patientsRepository.findByClinicIdAndEmail((long) AuthenticationModel.dentistAuthentication.getClinic().getId(), patient.getEmail());
+        if (clientAuthentication != null) {
+            existsCpf = patientsRepository.findByClinicIdAndCpf((long) clientAuthentication.getClinic().getId(), patient.getCpf());
+            existsEmail = patientsRepository.findByClinicIdAndEmail((long) clientAuthentication.getClinic().getId(), patient.getEmail());
+        } else if (dentistAuthentication != null) {
+            existsCpf = patientsRepository.findByClinicIdAndCpf((long) dentistAuthentication.getClinic().getId(), patient.getCpf());
+            existsEmail = patientsRepository.findByClinicIdAndEmail((long) dentistAuthentication.getClinic().getId(), patient.getEmail());
         }
         if (existsCpf != null) {
             return true;
@@ -59,19 +65,21 @@ public class PatientsService {
     }
 
     public boolean register(PatientsDto patient) {
+        ClientDto clientAuthentication = (ClientDto) session.getAttribute("client");
+        DentistDto dentistAuthentication = (DentistDto) session.getAttribute("dentist");
         List<PatientsDto> patients = new ArrayList<>();
         ClientDto clientDate = new ClientDto();
         ClinicDto clinicDate = new ClinicDto();
-        if (AuthenticationModel.clientAuthentication != null) {
-            patient.setClinic(AuthenticationModel.clientAuthentication.getClinic());
-            clientDate = AuthenticationModel.clientAuthentication;
-            clientDate.setClinic(AuthenticationModel.clientAuthentication.getClinic());
+        if (clientAuthentication != null) {
+            patient.setClinic(clientAuthentication.getClinic());
+            clientDate = clientAuthentication;
+            clientDate.setClinic(clientAuthentication.getClinic());
             clinicDate = clientDate.getClinic();
 
-        } else if (AuthenticationModel.dentistAuthentication != null) {
-            patient.setClinic(AuthenticationModel.dentistAuthentication.getClinic());
-            clientDate = AuthenticationModel.dentistAuthentication.getClinic().getClient();
-            clientDate.setClinic(AuthenticationModel.dentistAuthentication.getClinic());
+        } else if (dentistAuthentication != null) {
+            patient.setClinic(dentistAuthentication.getClinic());
+            clientDate = dentistAuthentication.getClinic().getClient();
+            clientDate.setClinic(dentistAuthentication.getClinic());
             clinicDate = clientDate.getClinic();
         } else {
             return false;
@@ -82,10 +90,10 @@ public class PatientsService {
         ClientDto isSuccess = clientRepository.save(clientDate);
 
         if (isSuccess != null) {
-            if(AuthenticationModel.clientAuthentication != null){
-                AuthenticationModel.clientAuthentication.setClinic(isSuccess.getClinic());
-            } else if(AuthenticationModel.dentistAuthentication != null){
-                AuthenticationModel.dentistAuthentication.setClinic(isSuccess.getClinic());
+            if(clientAuthentication != null){
+                clientAuthentication.setClinic(isSuccess.getClinic());
+            } else if(dentistAuthentication != null){
+                dentistAuthentication.setClinic(isSuccess.getClinic());
 
             }
             return true;
