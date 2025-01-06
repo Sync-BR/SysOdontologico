@@ -3,7 +3,6 @@ package com.sync.sysodontologico.service;
 import com.sync.sysodontologico.dto.ClientDto;
 import com.sync.sysodontologico.dto.ClinicDto;
 import com.sync.sysodontologico.dto.DentistDto;
-import com.sync.sysodontologico.model.AuthenticationModel;
 import com.sync.sysodontologico.repository.ClinicRepository;
 import com.sync.sysodontologico.repository.DentistRepository;
 import jakarta.servlet.http.HttpSession;

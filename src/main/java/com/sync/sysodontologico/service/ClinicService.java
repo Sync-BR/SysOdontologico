@@ -1,6 +1,5 @@
 package com.sync.sysodontologico.service;
 
-import com.sync.sysodontologico.model.AuthenticationModel;
 import com.sync.sysodontologico.dto.ClientDto;
 import com.sync.sysodontologico.dto.ClinicDto;
 import com.sync.sysodontologico.repository.ClientRepository;

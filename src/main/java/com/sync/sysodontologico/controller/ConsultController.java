@@ -4,7 +4,6 @@ import com.sync.sysodontologico.dto.ClientDto;
 import com.sync.sysodontologico.dto.ConsultDto;
 import com.sync.sysodontologico.dto.DentistDto;
 import com.sync.sysodontologico.dto.PatientsDto;
-import com.sync.sysodontologico.model.AuthenticationModel;
 import com.sync.sysodontologico.service.ConsultService;
 import com.sync.sysodontologico.service.DentistService;
 import com.sync.sysodontologico.service.PatientsService;

@@ -4,7 +4,6 @@ import com.sync.sysodontologico.dto.ClientDto;
 import com.sync.sysodontologico.dto.ClinicDto;
 import com.sync.sysodontologico.dto.DentistDto;
 import com.sync.sysodontologico.dto.PatientsDto;
-import com.sync.sysodontologico.model.AuthenticationModel;
 import com.sync.sysodontologico.service.ClinicService;
 import com.sync.sysodontologico.service.PatientsService;
 import jakarta.servlet.http.HttpSession;

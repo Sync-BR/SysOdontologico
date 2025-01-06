@@ -3,7 +3,6 @@ package com.sync.sysodontologico.service;
 import com.sync.sysodontologico.dto.ClientDto;
 import com.sync.sysodontologico.dto.ConsultDto;
 import com.sync.sysodontologico.dto.DentistDto;
-import com.sync.sysodontologico.model.AuthenticationModel;
 import com.sync.sysodontologico.repository.ConsultRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;

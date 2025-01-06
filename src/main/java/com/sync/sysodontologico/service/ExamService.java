@@ -4,7 +4,6 @@ import com.sync.sysodontologico.dto.ClientDto;
 import com.sync.sysodontologico.dto.DentistDto;
 import com.sync.sysodontologico.dto.ExamDto;
 import com.sync.sysodontologico.dto.HistoryDto;
-import com.sync.sysodontologico.model.AuthenticationModel;
 import com.sync.sysodontologico.repository.ExamRepository;
 import com.sync.sysodontologico.repository.HistoryRepository;
 import jakarta.servlet.http.HttpSession;

@@ -3,21 +3,15 @@ package com.sync.sysodontologico.controller;
 
 import com.sync.sysodontologico.dto.ClientDto;
 import com.sync.sysodontologico.dto.DentistDto;
-import com.sync.sysodontologico.model.AuthenticationModel;
 import com.sync.sysodontologico.service.*;
-import com.sync.sysodontologico.token.repository.TokenRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import static com.sync.sysodontologico.model.AuthenticationModel.clientAuthentication;
-import static com.sync.sysodontologico.model.AuthenticationModel.dentistAuthentication;
+
 
 @Controller
 public class HomeController {
@@ -174,7 +168,7 @@ public class HomeController {
             model.addAttribute("patients", patientsService.getPatientById(idPatient));
             model.addAttribute("dentists", dentistService.getAllDentist());
             model.addAttribute("clientAuthentication", clientAuthentication);
-            model.addAttribute("dentistAuthentication", AuthenticationModel.dentistAuthentication);
+            model.addAttribute("dentistAuthentication", dentistAuthentication);
             return "user/consult/addconsult";
         }
         return "redirect:/";

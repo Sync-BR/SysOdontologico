@@ -2,7 +2,6 @@ package com.sync.sysodontologico.controller;
 
 import com.sync.sysodontologico.dto.ClientDto;
 import com.sync.sysodontologico.dto.DentistDto;
-import com.sync.sysodontologico.model.AuthenticationModel;
 import com.sync.sysodontologico.service.DentistService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;

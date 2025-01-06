@@ -1,9 +1,7 @@
 package com.sync.sysodontologico.controller;
 
 import com.sync.sysodontologico.dto.ClientDto;
-import com.sync.sysodontologico.dto.DentistDto;
 import com.sync.sysodontologico.dto.UserDto;
-import com.sync.sysodontologico.model.AuthenticationModel;
 import com.sync.sysodontologico.service.UserService;
 import com.sync.sysodontologico.enums.SubscriptionsType;
 import jakarta.servlet.http.HttpSession;
@@ -12,8 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.Optional;
 
 @Controller
 public class UserController {
