@@ -25,7 +25,12 @@ public class UserController {
     @PostMapping("/U2FsdGVkX1+SVZbYQbDGn8Lli+o6A2wE8SiLvyMX29w=")
     public String login(UserDto user, RedirectAttributes redirectAttributes, HttpSession session) {
         UserDto userAuthentication = userService.login(user);
-        if (userAuthentication != null) {
+        if (userAuthentication != null ) {
+            if(!userAuthentication.getClient().isActive()){
+                redirectAttributes.addFlashAttribute("message", "Acesso expirado");
+                return "redirect:/";
+
+            }
             if (userAuthentication.getClient() != null) {
                 session.setAttribute("client", userAuthentication.getClient());
             } else if (userAuthentication.getDentist() != null) {
@@ -41,6 +46,7 @@ public class UserController {
     public String register(ClientDto client, RedirectAttributes redirectAttributes) {
         SubscriptionsType subscriptions = SubscriptionsType.basic;
         client.setSubscriptionsType(subscriptions);
+        client.setActive(true);
         switch (userService.register(client)) {
             case 200:
                 redirectAttributes.addFlashAttribute("messageSucess", "Cadastrado com sucesso");

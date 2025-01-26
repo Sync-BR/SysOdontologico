@@ -21,6 +21,7 @@ public class ClientDto {
     private String address;
     private int houseNumber;
     private SubscriptionsType subscriptionsType;
+    private boolean isActive;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserDto user;

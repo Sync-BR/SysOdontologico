@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 
-
 @Controller
 public class HomeController {
 
@@ -26,7 +25,8 @@ public class HomeController {
     private ExamService examService;
     @Autowired
     private HistoryService historyService;
-
+    @Autowired
+    private TokenService tokenService;
 
     //Controller e paginas inicias
     @GetMapping("/")
@@ -35,11 +35,21 @@ public class HomeController {
         return "index";
     }
 
+    @GetMapping("/admin/generate/token")
+    public String genereteToken() {
+        String token = tokenService.registerToken();
+        return "redirect:/";
+    }
 
     //Controller de registro
-    @GetMapping("/user/register")
-    public String userRegister() {
-        return "user/register";
+    @GetMapping("/user/register/{token}")
+    public String userRegister(@PathVariable String token) {
+        if (tokenService.checkToken(token)) {
+            return "user/register";
+        } else {
+
+            return "redirect:/";
+        }
 
     }
 

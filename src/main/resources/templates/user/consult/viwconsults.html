@@ -35,7 +35,26 @@
                 <td th:text="${#temporals.format(consult.consultDate, 'dd/MM/yyyy HH:mm')}"></td>
             </tr>
             </tbody>
+
         </table>
+        <style>
+            .back-button {
+                display: inline-block;
+                text-align: center;
+                padding: 10px 20px;
+                font-size: 16px;
+                color: white;
+                background-color: #007BFF;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                text-decoration: none;
+                margin-top: 20px;
+                width: 100%;
+            }
+
+        </style>
+        <a href="javascript:history.back()" class="back-button">Voltar</a>
     </section>
 </main>
 <footer>
