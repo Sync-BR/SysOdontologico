@@ -25,19 +25,27 @@ public class UserController {
     @PostMapping("/U2FsdGVkX1+SVZbYQbDGn8Lli+o6A2wE8SiLvyMX29w=")
     public String login(UserDto user, RedirectAttributes redirectAttributes, HttpSession session) {
         UserDto userAuthentication = userService.login(user);
-        if (userAuthentication != null ) {
-            if(!userAuthentication.getClient().isActive()){
-                redirectAttributes.addFlashAttribute("message", "Acesso expirado");
-                return "redirect:/";
 
-            }
+
+        if (userAuthentication != null) {
+
+
             if (userAuthentication.getClient() != null) {
-                session.setAttribute("client", userAuthentication.getClient());
+                if (!userAuthentication.getClient().isActive()) {
+                    redirectAttributes.addFlashAttribute("message", "Acesso expirado");
+                    return "redirect:/";
+
+                } else {
+
+                    session.setAttribute("client", userAuthentication.getClient());
+                }
             } else if (userAuthentication.getDentist() != null) {
                 session.setAttribute("dentist", userAuthentication.getDentist());
             }
+
             return "redirect:/user/home";
         }
+
         redirectAttributes.addFlashAttribute("message", "Login ou senha incorretar");
         return "redirect:/";
     }
