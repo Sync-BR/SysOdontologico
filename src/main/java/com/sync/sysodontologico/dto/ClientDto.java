@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @Entity(name = "CLIENTS")
@@ -20,8 +22,10 @@ public class ClientDto {
     private String cep;
     private String address;
     private int houseNumber;
+    @Enumerated(EnumType.ORDINAL)
     private SubscriptionsType subscriptionsType;
     private boolean isActive;
+    private LocalDate registrationDate = LocalDate.now();
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserDto user;
@@ -31,7 +35,6 @@ public class ClientDto {
 
 
     public ClientDto() {
-
     }
     @Override
     public String toString() {

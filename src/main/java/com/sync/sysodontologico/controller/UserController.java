@@ -2,12 +2,16 @@ package com.sync.sysodontologico.controller;
 
 import com.sync.sysodontologico.dto.ClientDto;
 import com.sync.sysodontologico.dto.UserDto;
+import com.sync.sysodontologico.service.TokenService;
 import com.sync.sysodontologico.service.UserService;
 import com.sync.sysodontologico.enums.SubscriptionsType;
+import com.sync.sysodontologico.util.EmailUtil;
+import com.sync.sysodontologico.util.TokenUtil;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -15,17 +19,24 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class UserController {
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private EmailUtil serviceEmail;
+    @Autowired
+    private TokenService serviceToken;
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/";
     }
-
+    @PostMapping("/U6AxIO9pFK6WVjl-bjgXuA/{email}")
+    public String requestToken(@PathVariable String email, RedirectAttributes redirectAttributes) {
+        String token = serviceToken.registerToken();
+        serviceEmail.sendEmail(email, token);
+        return "redirect:/";
+    }
     @PostMapping("/U2FsdGVkX1+SVZbYQbDGn8Lli+o6A2wE8SiLvyMX29w=")
     public String login(UserDto user, RedirectAttributes redirectAttributes, HttpSession session) {
         UserDto userAuthentication = userService.login(user);
-
 
         if (userAuthentication != null) {
 

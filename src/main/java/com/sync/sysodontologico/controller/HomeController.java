@@ -189,6 +189,12 @@ public class HomeController {
         ClientDto clientAuthentication = (ClientDto) session.getAttribute("client");
         DentistDto dentistAuthentication = (DentistDto) session.getAttribute("dentist");
         if (clientAuthentication != null || dentistAuthentication != null) {
+            if (clientAuthentication != null) {
+                model.addAttribute("subscription", clientAuthentication.getClinic().getClinicSubscription());
+            } else if(dentistAuthentication != null) {
+                model.addAttribute("subscription", dentistAuthentication.getClinic().getClinicSubscription());
+
+            }
             model.addAttribute("consults", consultService.getAllConsults());
             return "user/consult/viwconsults";
         }

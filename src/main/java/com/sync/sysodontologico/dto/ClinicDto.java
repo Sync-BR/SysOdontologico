@@ -18,6 +18,7 @@ public class ClinicDto {
     private String clinicAddress;
     private String clinicNumber;
     private String clinicPhone;
+    private int clinicSubscription;
     @OneToOne(mappedBy = "clinic")
     private ClientDto client;
     @OneToMany(mappedBy = "clinic", cascade = CascadeType.ALL)

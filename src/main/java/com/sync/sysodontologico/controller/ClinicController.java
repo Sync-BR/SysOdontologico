@@ -22,6 +22,7 @@ public class ClinicController {
     @PostMapping("/U2FsdGVkX19Y581RvR1+mhL3rDNLJx5/2earo049mttj80LIjLj+zIs8S77+bTeF")
     public String register(ClinicDto newClinic, RedirectAttributes redirectAttributes, HttpSession session) {
         ClientDto clientAuthentication = (ClientDto) session.getAttribute("client");
+        newClinic.setClinicSubscription(clientAuthentication.getSubscriptionsType().getValue());
         if (clientAuthentication != null ) {
             if (clientAuthentication.getClinic() != null) {
                 redirectAttributes.addFlashAttribute("message", "Clinic já registrada!");

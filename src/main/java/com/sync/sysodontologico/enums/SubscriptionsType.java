@@ -1,8 +1,12 @@
 package com.sync.sysodontologico.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum SubscriptionsType {
     bronze("Bronze"),
-    basic("Basic");
+    basic("Basic"),
+    premium("Premium"),;
 
     private final String name;
     private final int value;

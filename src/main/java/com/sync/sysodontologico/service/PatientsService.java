@@ -25,6 +25,19 @@ public class PatientsService {
         return patientsRepository.findById(id);
     }
 
+    public PatientsDto getPatientByCpf(String cpf) {
+        ClientDto client = new ClientDto();
+        DentistDto dentist = new DentistDto();
+        if(session.getAttribute("client") != null) {
+            client = (ClientDto) session.getAttribute("client");
+            return patientsRepository.findByClinicIdAndCpf((long) client.getClinic().getId(), cpf);
+        } else if(session.getAttribute("dentist") != null) {
+            dentist = (DentistDto) session.getAttribute("dentist");
+            return patientsRepository.findByClinicIdAndCpf((long) dentist.getClinic().getId(), cpf);
+
+        }
+        return null;
+    }
     public List<PatientsDto> getAllPatients() {
         ClientDto clientAuthentication = (ClientDto) session.getAttribute("client");
         DentistDto dentistAuthentication = (DentistDto) session.getAttribute("dentist");

@@ -23,6 +23,8 @@
                 <th>Dentista</th>
                 <th>CPF do Dentista</th>
                 <th>Data da Consulta</th>
+                <th th:if="${subscription == 2}">Enviar lembrete</th>
+
             </tr>
             </thead>
             <tbody id="consultsTable">
@@ -33,6 +35,15 @@
                 <td th:text="${consult.dentistName}"></td>
                 <td th:text="${consult.dentistCpf}"></td>
                 <td th:text="${#temporals.format(consult.consultDate, 'dd/MM/yyyy HH:mm')}"></td>
+                <td th:if="${subscription == 2}">
+                    <button class="send-reminder-btn"
+                            th:data-cpf="${consult.patientCpf}"
+                            onclick="sendReminder(this)">
+                        Enviar Lembrete
+                    </button>
+                </td>
+
+
             </tr>
             </tbody>
 
@@ -52,7 +63,29 @@
                 margin-top: 20px;
                 width: 100%;
             }
+            .send-reminder-btn {
+                background-color: #4CAF50; /* Verde moderno */
+                color: white; /* Texto branco */
+                padding: 10px 20px; /* Espaçamento interno */
+                font-size: 16px; /* Tamanho da fonte */
+                border: none; /* Remove bordas padrão */
+                border-radius: 25px; /* Bordas arredondadas */
+                cursor: pointer; /* Mostra o cursor de clique */
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+                transition: all 0.3s ease; /* Animação suave */
+            }
 
+            .send-reminder-btn:hover {
+                background-color: #45a049; /* Cor mais escura ao passar o mouse */
+                box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Aumenta a sombra no hover */
+                transform: translateY(-2px); /* Eleva o botão */
+            }
+
+            .send-reminder-btn:active {
+                background-color: #3e8e41; /* Cor mais escura ao clicar */
+                transform: translateY(1px); /* Abaixa ligeiramente ao clicar */
+                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2); /* Sombra reduzida */
+            }
         </style>
         <a href="javascript:history.back()" class="back-button">Voltar</a>
     </section>
@@ -60,6 +93,47 @@
 <footer>
     <p>© 2025 SYS Odontológico – Todos os direitos reservados.</p>
 </footer>
+<script>
+    function sendReminder(button) {
+        // Recupera o CPF do atributo data-cpf
+        let patientCpf = button.getAttribute('data-cpf');
+
+        // Remover as aspas extras, caso existam
+        patientCpf = patientCpf.replace(/"/g, '');
+
+        // Enviar o CPF diretamente como uma string no corpo da requisição
+        fetch('/v1/twiliosms/sendSms', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(patientCpf),  // Aqui estamos enviando apenas o CPF como string
+        })
+            .then(response => {
+                // Log a resposta bruta para verificar o que o servidor está retornando
+                console.log('Resposta do servidor:', response);
+
+                // Verifique se a resposta não é um erro (status de sucesso 200-299)
+                if (!response.ok) {
+                    throw new Error('Erro no servidor: ' + response.statusText);
+                }
+
+                // Se a resposta for um JSON, tente convertê-la
+                return response.json();
+            })
+            .then(data => {
+                console.log('Dados recebidos do servidor:', data);
+                alert("Lembrete enviado com sucesso!");
+            })
+            .catch(error => {
+                console.error('Erro ao enviar lembrete:', error);
+                alert("Erro ao enviar lembrete.");
+            });
+    }
+
+
+</script>
+
 
 <script src="../../../src/js/viwconsult.js">
 </script>

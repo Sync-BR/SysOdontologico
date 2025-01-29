@@ -9,11 +9,89 @@
     <link rel="stylesheet" href="./../src/style/style.css">
     <link rel="stylesheet" href="./../src/style/message.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <style>
+        .modal-email {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-email-content {
+            background: #fff;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 420px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border: none;
+        }
+
+        .close-email {
+            color: #555;
+            float: right;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-email:hover {
+            color: #007bff;
+        }
+
+        .modal-email input, .modal-email button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .modal input:focus, .modal button:hover {
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+        }
+
+        .modal-email button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .modal-email button:hover {
+            background-color: #0056b3;
+        }
+
+        @media (max-width: 600px) {
+            .modal-email-content {
+                width: 95%;
+                margin: 20% auto;
+                padding: 25px;
+            }
+        }
+
+
+
+    </style>
+
 </head>
 
 <body>
-    
+
 <div th:if="${message}" class="errorMessage" role="alert">
     <p th:text="${message}"></p>
     <button class="close-btn" onclick="this.parentElement.style.display='none'">×</button>
@@ -54,7 +132,7 @@
                                 <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Login</a>
                             </li>
                         </ul>
-                       
+
                     </div>
                 </div>
             </div>
@@ -100,7 +178,7 @@
                 <h2>Gerencie Sua Clínica Odontológica com Facilidade</h2>
                 <p>Oferecemos planos personalizados para atender às necessidades de sua clínica odontológica. Simplifique a gestão e foque no que realmente importa: o cuidado com seus pacientes.</p>
                 <div class="planos-cards">
-                    <div class="plano-card destaque">
+                    <div class="plano-card destaque " >
                         <h3>Plano Básico</h3>
                         <p>Ideal para clínicas pequenas ou profissionais autônomos.</p>
                         <ul>
@@ -108,9 +186,9 @@
                             <li>Cadastro de pacientes  & exames</li>
                             <li>Cadastro de funcionarios</li>
                         </ul>
-                        <a href="https://wa.me/5571983579082?text=Olá,%20gostaria%20de%20saber%20mais%20sobre%20o%20Plano%20Básico%20para%20clínicas%20odontológicas."
-                           target="_blank">
-                            <button>Experimente grátis por 14 dias!</button>
+<!--                        <a href="https://wa.me/5571983579082?text=Olá,%20gostaria%20de%20saber%20mais%20sobre%20o%20Plano%20Básico%20para%20clínicas%20odontológicas."-->
+<!--                           target="_blank">-->
+                            <button id="openModal">Experimente grátis por 14 dias!</button>
                         </a>
                     </div>
                     <div class="plano-card">
@@ -136,7 +214,7 @@
                 </div>
             </div>
         </section>
-        
+
     </main>
     <footer class="rodape">
         <div class="container">
@@ -152,33 +230,83 @@
     </footer>
 
 
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
             <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Acessar painel</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title" id="exampleModalLabel">Login</h5>
             </div>
             <div class="modal-body">
-              <form method="post" action="/U2FsdGVkX1+SVZbYQbDGn8Lli+o6A2wE8SiLvyMX29w=" >
-                <div class="mb-3">
-                  <label for="username-name" class="col-form-label">Login:</label>
-                  <input type="text" class="form-control" id="username-name" name="username">
-                </div>
-                <div class="mb-3">
-                  <label for="password-text" class="col-form-label">Senha:</label>
-                  <input type="password" class="form-control" id="password-text" name="password">
-                </div>
-                  <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                      <button type="submit" class="btn btn-primary">Conectar</button>
-                  </div>
-              </form>
+                <form method="post" action="/U2FsdGVkX1+SVZbYQbDGn8Lli+o6A2wE8SiLvyMX29w=" >
+                    <div class="mb-3">
+                        <label for="username-name" class="col-form-label">Login:</label>
+                        <input type="text" class="form-control" id="username-name" name="username">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password-text" class="col-form-label">Senha:</label>
+                        <input type="password" class="form-control" id="password-text" name="password">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Conectar</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </form>
             </div>
-
-          </div>
         </div>
-      </div>
+    </div>
+</div>
+
+<div id="emailModal" class="modal-email">
+    <div class="modal-email-content">
+        <span class="close-email">&times;</span>
+        <h2>Cadastre seu e-mail</h2>
+        <p>O Plano Básico é ideal para clínicas pequenas ou profissionais autônomos que buscam uma solução simples e eficiente para a gestão de seus atendimentos. Com ele, é possível gerenciar agendamentos, cadastrar pacientes e exames, além de manter um controle organizado dos funcionários. O plano oferece uma interface intuitiva e recursos essenciais para otimizar o dia a dia da sua clínica, proporcionando mais praticidade e eficiência no atendimento aos pacientes.</p>
+        <input type="email" id="userEmail" placeholder="Digite seu e-mail" required>
+        <button onclick="submitEmail()">Enviar</button>
+    </div>
+</div>
+
+<script>
+    var modal = document.getElementById("emailModal");
+    var btn = document.getElementById("openModal");
+    var span = document.getElementsByClassName("close-email")[0];
+
+    btn.onclick = function() {
+        modal.style.display = "block";
+    }
+
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    function submitEmail() {
+        var email = document.getElementById("userEmail").value;
+        if (email) {
+            fetch(`/U6AxIO9pFK6WVjl-bjgXuA/${encodeURIComponent(email)}`, {
+                method: 'POST',
+            }).then(response => {
+                if (response.ok) {
+                    alert("Um e-mail foi enviado para sua caixa de entrada. Verifique para mais informações.");
+                    modal.style.display = "none";
+                } else {
+                    alert("Erro ao enviar e-mail.");
+                }
+            }).catch(error => {
+                alert("Um e-mail foi enviado para sua caixa de entrada. Verifique para mais informações.");
+            });
+        } else {
+            alert("Por favor, insira um e-mail válido.");
+        }
+    }
+</script>
+
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
